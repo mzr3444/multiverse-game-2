@@ -3,408 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Multiverse: Fractured</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background: #050509;
-            color: white;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-
-        #game {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            background:
-                radial-gradient(circle at center, #202040 0%, #090912 55%, #020205 100%);
-        }
-
-        #scene {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 90px;
-            opacity: 0.25;
-        }
-
-        #dialogue {
-            position: relative;
-            width: 100%;
-            padding: 30px 8%;
-            background: linear-gradient(
-                transparent,
-                rgba(0,0,0,0.95) 25%
-            );
-        }
-
-        #name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #6ecbff;
-            margin-bottom: 10px;
-        }
-
-        #text {
-            font-size: 22px;
-            line-height: 1.5;
-            min-height: 90px;
-        }
-
-        #choices {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 18px;
-            background: rgba(20,20,35,0.9);
-            color: white;
-            border: 1px solid #555;
-            border-radius: 8px;
-            font-size: 17px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background: #303050;
-            border-color: #6ecbff;
-            transform: translateY(-2px);
-        }
-
-        #title {
-            position: absolute;
-            top: 30px;
-            left: 40px;
-            font-size: 18px;
-            letter-spacing: 4px;
-            color: #aaa;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="game">
+    <!-- GAME -->
+    <main id="game">
 
-    <div id="title">MULTIVERSE: FRACTURED</div>
+        <!-- TOP BAR -->
+        <header class="top-bar">
+            <div class="game-title">
+                MULTIVERSE: FRACTURED
+            </div>
 
-    <div id="scene">🌌</div>
+            <div class="universe">
+                UNIVERSE <span id="universeNumber">01</span>
+            </div>
+        </header>
 
-    <div id="dialogue">
 
-        <div id="name">UNKNOWN</div>
+        <!-- SCENE -->
+        <section id="scene">
 
-        <div id="text">
-            Loading...
+            <!-- Background -->
+            <div id="background"></div>
+
+            <!-- Characters -->
+            <div id="characters">
+
+                <div id="alex" class="character">
+                    <div class="character-body"></div>
+                    <div class="character-name">ALEX</div>
+                </div>
+
+                <div id="stranger" class="character hidden">
+                    <div class="character-body"></div>
+                    <div class="character-name">STRANGER</div>
+                </div>
+
+            </div>
+
+
+            <!-- Scene Effects -->
+            <div id="darkness"></div>
+
+            <div id="sceneText">
+                <div id="location">
+                    ABANDONED SUBWAY
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- DIALOGUE -->
+        <section id="dialogue">
+
+            <div id="speaker">
+                SYSTEM
+            </div>
+
+            <div id="dialogueText">
+                Loading...
+            </div>
+
+            <div id="choices"></div>
+
+        </section>
+
+
+        <!-- STATS -->
+        <aside id="stats">
+
+            <div class="stat">
+                <span>ALEX</span>
+                <div class="bar">
+                    <div id="alexRelationship" class="fill"></div>
+                </div>
+            </div>
+
+            <div class="stat">
+                <span>STRANGER</span>
+                <div class="bar">
+                    <div id="strangerRelationship" class="fill"></div>
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- TIMER -->
+        <div id="timerContainer">
+
+            <div id="timerText">
+                CHOICE
+            </div>
+
+            <div id="timerBar">
+                <div id="timerFill"></div>
+            </div>
+
         </div>
 
-        <div id="choices"></div>
 
-    </div>
+        <!-- SAVE MESSAGE -->
+        <div id="saveMessage">
+            GAME SAVED
+        </div>
 
-</div>
+    </main>
 
-<script>
 
-const story = {
-
-    start: {
-        name: "UNKNOWN",
-        text: "Don't trust the version of me you meet first.",
-        choices: [
-            {
-                text: "Who are you?",
-                next: "who"
-            },
-            {
-                text: "Where am I?",
-                next: "where"
-            },
-            {
-                text: "Look around the station.",
-                next: "station"
-            },
-            {
-                text: "Run.",
-                next: "run"
-            }
-        ]
-    },
-
-    who: {
-        name: "UNKNOWN",
-        text: "Someone who has already watched this universe die three times.",
-        choices: [
-            {
-                text: "What do you mean?",
-                next: "meaning"
-            },
-            {
-                text: "I don't believe you.",
-                next: "doubt"
-            }
-        ]
-    },
-
-    where: {
-        name: "UNKNOWN",
-        text: "A subway station. Except... this isn't your subway station.",
-        choices: [
-            {
-                text: "What does that mean?",
-                next: "meaning"
-            },
-            {
-                text: "Find an exit.",
-                next: "exit"
-            }
-        ]
-    },
-
-    station: {
-        name: "YOU",
-        text: "The station looks abandoned. But there are three sets of footprints in the dust.",
-        choices: [
-            {
-                text: "Follow the footprints.",
-                next: "footprints"
-            },
-            {
-                text: "Inspect the strange device on your wrist.",
-                next: "device"
-            }
-        ]
-    },
-
-    run: {
-        name: "YOU",
-        text: "You turn around and run. After twenty seconds, you realize you're back where you started.",
-        choices: [
-            {
-                text: "Inspect the device on your wrist.",
-                next: "device"
-            },
-            {
-                text: "Keep running.",
-                next: "loop"
-            }
-        ]
-    },
-
-    meaning: {
-        name: "UNKNOWN",
-        text: "Every decision creates another timeline. And something is destroying them.",
-        choices: [
-            {
-                text: "Who is destroying them?",
-                next: "killer"
-            },
-            {
-                text: "Why am I here?",
-                next: "chosen"
-            }
-        ]
-    },
-
-    doubt: {
-        name: "UNKNOWN",
-        text: "You shouldn't. That's exactly what I expected you to say.",
-        choices: [
-            {
-                text: "Explain yourself.",
-                next: "meaning"
-            },
-            {
-                text: "Walk away.",
-                next: "exit"
-            }
-        ]
-    },
-
-    exit: {
-        name: "YOU",
-        text: "You find an exit door. Behind it is another subway station... identical to this one.",
-        choices: [
-            {
-                text: "Enter the other station.",
-                next: "universe"
-            },
-            {
-                text: "Stay here.",
-                next: "stay"
-            }
-        ]
-    },
-
-    footprints: {
-        name: "YOU",
-        text: "The footprints stop beside a wall. Written across it are the words: YOU HAVE BEEN HERE BEFORE.",
-        choices: [
-            {
-                text: "Touch the writing.",
-                next: "universe"
-            },
-            {
-                text: "Back away.",
-                next: "device"
-            }
-        ]
-    },
-
-    device: {
-        name: "SYSTEM",
-        text: "UNIVERSE DETECTED: 01. TIMELINE STABILITY: 43%.",
-        choices: [
-            {
-                text: "Activate the device.",
-                next: "universe"
-            },
-            {
-                text: "Deactivate it.",
-                next: "stay"
-            }
-        ]
-    },
-
-    loop: {
-        name: "SYSTEM",
-        text: "ERROR. You cannot leave this timeline.",
-        choices: [
-            {
-                text: "Stop.",
-                next: "device"
-            }
-        ]
-    },
-
-    killer: {
-        name: "UNKNOWN",
-        text: "You.",
-        choices: [
-            {
-                text: "Me?",
-                next: "chosen"
-            },
-            {
-                text: "You're lying.",
-                next: "doubt"
-            }
-        ]
-    },
-
-    chosen: {
-        name: "UNKNOWN",
-        text: "Because every universe needs someone capable of changing it.",
-        choices: [
-            {
-                text: "Then I'll change it.",
-                next: "universe"
-            },
-            {
-                text: "I want to go home.",
-                next: "stay"
-            }
-        ]
-    },
-
-    universe: {
-        name: "SYSTEM",
-        text: "TIMELINE SHIFT INITIATED...",
-        choices: [
-            {
-                text: "Continue.",
-                next: "universe2"
-            }
-        ]
-    },
-
-    universe2: {
-        name: "UNKNOWN",
-        text: "Welcome to Universe 02. In this universe... you never existed.",
-        choices: [
-            {
-                text: "What happened to me?",
-                next: "ending"
-            },
-            {
-                text: "Find another version of yourself.",
-                next: "ending"
-            }
-        ]
-    },
-
-    stay: {
-        name: "YOU",
-        text: "You stay where you are. The lights flicker. Someone who looks exactly like you walks into the station.",
-        choices: [
-            {
-                text: "Talk to them.",
-                next: "ending"
-            },
-            {
-                text: "Hide.",
-                next: "ending"
-            }
-        ]
-    },
-
-    ending: {
-        name: "SYSTEM",
-        text: "This is only the beginning...",
-        choices: [
-            {
-                text: "Restart.",
-                next: "start"
-            }
-        ]
-    }
-
-};
-
-function loadScene(sceneName) {
-
-    const scene = story[sceneName];
-
-    document.getElementById("name").textContent = scene.name;
-    document.getElementById("text").textContent = scene.text;
-
-    const choices = document.getElementById("choices");
-
-    choices.innerHTML = "";
-
-    scene.choices.forEach(choice => {
-
-        const button = document.createElement("button");
-
-        button.textContent = choice.text;
-
-        button.onclick = () => {
-            loadScene(choice.next);
-        };
-
-        choices.appendChild(button);
-
-    });
-
-}
-
-loadScene("start");
-
-</script>
+    <script src="game.js"></script>
 
 </body>
 </html>
