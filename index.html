@@ -3,122 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Multiverse: Fractured</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- GAME -->
-    <main id="game">
+<div id="game">
 
-        <!-- TOP BAR -->
-        <header class="top-bar">
-            <div class="game-title">
-                MULTIVERSE: FRACTURED
+    <!-- TOP HUD -->
+    <header class="hud">
+
+        <div>
+            <h1>MULTIVERSE: FRACTURED</h1>
+            <small id="multiverseId">MULTIVERSE #0000</small>
+        </div>
+
+        <div class="hud-center">
+            <span>UNIVERSE</span>
+            <strong id="dimensionName">01-A</strong>
+        </div>
+
+        <div class="stability">
+            <span>REALITY STABILITY</span>
+            <div class="stability-bar">
+                <div id="stabilityFill"></div>
+            </div>
+            <strong id="stabilityText">100%</strong>
+        </div>
+
+    </header>
+
+
+    <!-- MAIN SCENE -->
+    <section id="scene">
+
+        <div id="background"></div>
+
+        <div id="eventWarning">
+            ⚠ MULTIVERSE EVENT
+            <span id="eventName"></span>
+        </div>
+
+        <div id="characters">
+
+            <div id="alex" class="character hidden">
+                <div class="portrait alexPortrait"></div>
+                <div class="characterLabel">ALEX</div>
             </div>
 
-            <div class="universe">
-                UNIVERSE <span id="universeNumber">01</span>
-            </div>
-        </header>
-
-
-        <!-- SCENE -->
-        <section id="scene">
-
-            <!-- Background -->
-            <div id="background"></div>
-
-            <!-- Characters -->
-            <div id="characters">
-
-                <div id="alex" class="character">
-                    <div class="character-body"></div>
-                    <div class="character-name">ALEX</div>
-                </div>
-
-                <div id="stranger" class="character hidden">
-                    <div class="character-body"></div>
-                    <div class="character-name">STRANGER</div>
-                </div>
-
-            </div>
-
-
-            <!-- Scene Effects -->
-            <div id="darkness"></div>
-
-            <div id="sceneText">
-                <div id="location">
-                    ABANDONED SUBWAY
-                </div>
-            </div>
-
-        </section>
-
-
-        <!-- DIALOGUE -->
-        <section id="dialogue">
-
-            <div id="speaker">
-                SYSTEM
-            </div>
-
-            <div id="dialogueText">
-                Loading...
-            </div>
-
-            <div id="choices"></div>
-
-        </section>
-
-
-        <!-- STATS -->
-        <aside id="stats">
-
-            <div class="stat">
-                <span>ALEX</span>
-                <div class="bar">
-                    <div id="alexRelationship" class="fill"></div>
-                </div>
-            </div>
-
-            <div class="stat">
-                <span>STRANGER</span>
-                <div class="bar">
-                    <div id="strangerRelationship" class="fill"></div>
-                </div>
-            </div>
-
-        </aside>
-
-
-        <!-- TIMER -->
-        <div id="timerContainer">
-
-            <div id="timerText">
-                CHOICE
-            </div>
-
-            <div id="timerBar">
-                <div id="timerFill"></div>
+            <div id="stranger" class="character hidden">
+                <div class="portrait strangerPortrait"></div>
+                <div class="characterLabel">STRANGER</div>
             </div>
 
         </div>
 
+    </section>
 
-        <!-- SAVE MESSAGE -->
-        <div id="saveMessage">
-            GAME SAVED
+
+    <!-- DIALOGUE -->
+    <section id="dialogue">
+
+        <div id="speaker">SYSTEM</div>
+
+        <div id="dialogueText">
+            Loading...
         </div>
 
-    </main>
+        <div id="choices"></div>
+
+    </section>
 
 
-    <script src="game.js"></script>
+    <!-- LEFT MENU -->
+    <aside id="menu">
+
+        <button onclick="openMap()">
+            ◇ DIMENSION MAP
+        </button>
+
+        <button onclick="openStorylines()">
+            ◇ STORYLINES
+        </button>
+
+        <button onclick="newStoryline()">
+            ◇ NEW STORYLINE
+        </button>
+
+        <button class="danger" onclick="hardReset()">
+            ⚠ HARD RESET
+        </button>
+
+        <button class="danger" onclick="trueReset()">
+            ☠ TRUE RESET
+        </button>
+
+    </aside>
+
+
+    <!-- RELATIONSHIPS -->
+    <aside id="relationships">
+
+        <h3>RELATIONSHIPS</h3>
+
+        <div class="relationship">
+            <span>ALEX</span>
+            <div>
+                <div id="alexRelation"></div>
+            </div>
+        </div>
+
+        <div class="relationship">
+            <span>STRANGER</span>
+            <div>
+                <div id="strangerRelation"></div>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- EVENT PANEL -->
+    <aside id="events">
+
+        <h3>ACTIVE EVENTS</h3>
+
+        <div id="eventList">
+            No major events detected.
+        </div>
+
+    </aside>
+
+
+    <!-- DIMENSION MAP -->
+    <div id="mapScreen" class="overlay hidden">
+
+        <div class="panel">
+
+            <button class="close" onclick="closeOverlays()">X</button>
+
+            <h2>DIMENSION MAP</h2>
+
+            <p>
+                Visited dimensions can be revisited.
+                Returning to an earlier dimension can create
+                an entirely new branch.
+            </p>
+
+            <div id="dimensionList"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STORYLINES -->
+    <div id="storyScreen" class="overlay hidden">
+
+        <div class="panel">
+
+            <button class="close" onclick="closeOverlays()">X</button>
+
+            <h2>STORYLINES</h2>
+
+            <div id="storyList"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESET CONFIRMATION -->
+    <div id="resetScreen" class="overlay hidden">
+
+        <div class="panel">
+
+            <h2 id="resetTitle">RESET</h2>
+
+            <p id="resetDescription"></p>
+
+            <button onclick="confirmReset()">
+                CONFIRM
+            </button>
+
+            <button onclick="closeOverlays()">
+                CANCEL
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SAVE INDICATOR -->
+    <div id="saveIndicator">
+        TIMELINE SAVED
+    </div>
+
+</div>
+
+<script src="game.js"></script>
 
 </body>
 </html>
