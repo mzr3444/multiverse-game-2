@@ -1,1012 +1,742 @@
-/*
-==================================================
-MULTIVERSE: FRACTURED
-GAME ENGINE
-==================================================
-*/
+/* =========================================
+   MULTIVERSE: FRACTURED
+   PROCEDURAL MULTIVERSE ENGINE
+========================================= */
 
 
-/* =========================
-   PLAYER DATA
-========================= */
+/* ---------- RANDOM ---------- */
 
-let player = {
+function randomNumber(max) {
+    return Math.floor(Math.random() * max);
+}
 
-    universe: 1,
+function randomId() {
+    return Math.floor(
+        1000 + Math.random() * 9000
+    );
+}
 
-    alexRelationship: 50,
 
-    strangerRelationship: 50,
+/* ---------- STORY THEMES ---------- */
 
-    trust: 50,
+const themes = [
+    "The Fractured Rebellion",
+    "The Last Human",
+    "War of the Versions",
+    "The Missing Timeline",
+    "Echoes of Tomorrow",
+    "The Collapse",
+    "The Infinite Stranger",
+    "The Dead Universe"
+];
 
-    timelineStability: 100,
+const locations = [
+    "Ruined Metro Station",
+    "Abandoned City",
+    "Underground Facility",
+    "Frozen Colony",
+    "Broken Downtown",
+    "Deserted Laboratory",
+    "Unknown Planet",
+    "Destroyed Research Center"
+];
+
+const events = [
+    "THE FRACTURE",
+    "THE COLLAPSE",
+    "THE ECHO",
+    "THE CONVERGENCE",
+    "THE INVERSION",
+    "THE GREAT SHIFT",
+    "THE PARADOX",
+    "THE VOID"
+];
+
+
+/* ---------- GAME STATE ---------- */
+
+let game = {
+
+    multiverseId: randomId(),
+
+    storyline: themes[
+        randomNumber(themes.length)
+    ],
+
+    currentDimension: "01-A",
+
+    dimensions: [],
 
     choices: [],
 
-    flags: {}
+    events: [],
+
+    characters: {
+
+        alex: 50,
+
+        stranger: 50
+
+    },
+
+    stability: 100,
+
+    currentScene: "start",
+
+    generation: 1
 
 };
 
 
-/* =========================
-   STORY
-========================= */
+/* =========================================
+   DIMENSION GENERATION
+========================================= */
 
-const story = {
+function generateDimension(parent = null) {
 
-    start: {
+    const number =
+        String(
+            Math.floor(
+                1 + Math.random() * 99
+            )
+        ).padStart(2, "0");
 
-        speaker: "SYSTEM",
+    const letter =
+        String.fromCharCode(
+            65 + randomNumber(26)
+        );
 
-        location: "ABANDONED SUBWAY",
+    const id =
+        number + "-" + letter;
 
-        background: "subway",
+    const dimension = {
 
-        character: "none",
+        id: id,
 
-        text:
-            "11:47 PM. You wake up on the floor of an abandoned subway station.",
+        parent:
+            parent ||
+            null,
 
-        choices: [
+        location:
+            locations[
+                randomNumber(
+                    locations.length
+                )
+            ],
 
-            {
-                text: "Get up and look around.",
-                next: "lookAround",
+        stability:
+            Math.floor(
+                40 + Math.random() * 60
+            ),
 
-                effect: {
-                    trust: 5
-                }
-            },
+        visited: true,
 
-            {
-                text: "Stay still and listen.",
-                next: "listen",
+        createdAt:
+            Date.now(),
 
-                effect: {
-                    trust: -2
-                }
-            }
+        altered: false
 
-        ]
+    };
 
-    },
+    game.dimensions.push(
+        dimension
+    );
 
+    return dimension;
+}
 
-    lookAround: {
 
-        speaker: "ALEX",
+/* =========================================
+   ENSURE STARTING DIMENSION
+========================================= */
 
-        location: "ABANDONED SUBWAY",
+function setupStartingDimension() {
 
-        character: "alex",
+    if (
+        game.dimensions.length === 0
+    ) {
 
-        text:
-            "The station is empty. No passengers. No trains. Just a strange device attached to your wrist.",
+        const starting =
+            generateDimension();
 
-        choices: [
-
-            {
-                text: "Examine the device.",
-                next: "device",
-
-                effect: {
-                    timelineStability: -5
-                }
-            },
-
-            {
-                text: "Search for an exit.",
-                next: "exit"
-            }
-
-        ]
-
-    },
-
-
-    listen: {
-
-        speaker: "ALEX",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "alex",
-
-        text:
-            "You hear footsteps coming from the darkness.",
-
-        choices: [
-
-            {
-                text: "Call out.",
-                next: "strangerEntrance",
-
-                effect: {
-                    strangerRelationship: 5
-                }
-            },
-
-            {
-                text: "Hide.",
-                next: "strangerEntrance",
-
-                effect: {
-                    strangerRelationship: -5
-                }
-            }
-
-        ]
-
-    },
-
-
-    device: {
-
-        speaker: "SYSTEM",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "alex",
-
-        text:
-            "UNIVERSE DETECTED: 01. TIMELINE STABILITY: 95%.",
-
-        choices: [
-
-            {
-                text: "Activate the device.",
-                next: "activate",
-
-                effect: {
-                    timelineStability: -20
-                }
-            },
-
-            {
-                text: "Leave it alone.",
-                next: "strangerEntrance"
-            }
-
-        ]
-
-    },
-
-
-    exit: {
-
-        speaker: "ALEX",
-
-        location: "SUBWAY EXIT",
-
-        character: "alex",
-
-        text:
-            "You find an exit. But outside is another subway station.",
-
-        choices: [
-
-            {
-                text: "Go outside.",
-                next: "universeShift"
-            },
-
-            {
-                text: "Go back.",
-                next: "strangerEntrance"
-            }
-
-        ]
-
-    },
-
-
-    strangerEntrance: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "You shouldn't be here.",
-
-        choices: [
-
-            {
-                text: "Who are you?",
-                next: "who",
-
-                effect: {
-                    strangerRelationship: 5
-                }
-            },
-
-            {
-                text: "Back away.",
-                next: "threat",
-
-                effect: {
-                    strangerRelationship: -10
-                }
-            },
-
-            {
-                text: "How do you know I'm not supposed to be here?",
-                next: "knows",
-
-                effect: {
-                    strangerRelationship: 8
-                }
-            }
-
-        ]
-
-    },
-
-
-    who: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "I've met you before.",
-
-        choices: [
-
-            {
-                text: "That's impossible.",
-                next: "impossible"
-            },
-
-            {
-                text: "Where?",
-                next: "where"
-            }
-
-        ]
-
-    },
-
-
-    knows: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "Because I've seen what happens when you stay.",
-
-        choices: [
-
-            {
-                text: "What happens?",
-                next: "warning",
-
-                effect: {
-                    strangerRelationship: 5
-                }
-            },
-
-            {
-                text: "I don't believe you.",
-                next: "impossible",
-
-                effect: {
-                    strangerRelationship: -5
-                }
-            }
-
-        ]
-
-    },
-
-
-    threat: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "If I wanted you dead, you wouldn't be standing there.",
-
-        choices: [
-
-            {
-                text: "Then help me.",
-                next: "help",
-
-                effect: {
-                    strangerRelationship: 10
-                }
-            },
-
-            {
-                text: "Stay away from me.",
-                next: "betrayal",
-
-                effect: {
-                    strangerRelationship: -15
-                }
-            }
-
-        ]
-
-    },
-
-
-    where: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "In another universe.",
-
-        choices: [
-
-            {
-                text: "Another universe?",
-                next: "multiverse"
-            }
-
-        ]
-
-    },
-
-
-    impossible: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "That's what I said the first time too.",
-
-        choices: [
-
-            {
-                text: "First time?",
-                next: "multiverse"
-            }
-
-        ]
-
-    },
-
-
-    warning: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "This universe collapses in 17 minutes.",
-
-        choices: [
-
-            {
-                text: "You're lying.",
-                next: "timerScene"
-            },
-
-            {
-                text: "How do we stop it?",
-                next: "help",
-
-                effect: {
-                    strangerRelationship: 10
-                }
-            }
-
-        ],
-
-        timed: true,
-
-        time: 12
-
-    },
-
-
-    help: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "The device on your wrist. It can open a doorway to another timeline.",
-
-        choices: [
-
-            {
-                text: "Open the doorway.",
-                next: "universeShift",
-
-                effect: {
-                    timelineStability: -15
-                }
-            },
-
-            {
-                text: "Destroy the device.",
-                next: "destroy",
-
-                effect: {
-                    timelineStability: 20
-                }
-            }
-
-        ]
-
-    },
-
-
-    activate: {
-
-        speaker: "SYSTEM",
-
-        location: "SUBWAY",
-
-        character: "alex",
-
-        text:
-            "TIMELINE BREACH DETECTED.",
-
-        choices: [
-
-            {
-                text: "Continue.",
-                next: "universeShift"
-            }
-
-        ]
-
-    },
-
-
-    destroy: {
-
-        speaker: "ALEX",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "alex",
-
-        text:
-            "You smash the device against the floor.",
-
-        choices: [
-
-            {
-                text: "Look at the stranger.",
-                next: "destroyResult"
-            }
-
-        ]
-
-    },
-
-
-    destroyResult: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "You just trapped us here.",
-
-        choices: [
-
-            {
-                text: "What have I done?",
-                next: "badEnding"
-            }
-
-        ]
-
-    },
-
-
-    betrayal: {
-
-        speaker: "SYSTEM",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "The stranger disappears into the darkness.",
-
-        choices: [
-
-            {
-                text: "Follow them.",
-                next: "universeShift"
-            },
-
-            {
-                text: "Stay.",
-                next: "badEnding"
-            }
-
-        ]
-
-    },
-
-
-    timerScene: {
-
-        speaker: "SYSTEM",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "A countdown appears on your wrist.",
-
-        choices: [
-
-            {
-                text: "Run with the stranger.",
-                next: "universeShift"
-            },
-
-            {
-                text: "Stay and investigate.",
-                next: "badEnding"
-            }
-
-        ],
-
-        timed: true,
-
-        time: 10
-
-    },
-
-
-    multiverse: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "Every decision creates another version of this world.",
-
-        choices: [
-
-            {
-                text: "So there are versions of me?",
-                next: "alternate"
-            },
-
-            {
-                text: "How many universes are there?",
-                next: "alternate"
-            }
-
-        ]
-
-    },
-
-
-    alternate: {
-
-        speaker: "STRANGER",
-
-        location: "ABANDONED SUBWAY",
-
-        character: "stranger",
-
-        text:
-            "Enough to make one mistake disappear... and another one take its place.",
-
-        choices: [
-
-            {
-                text: "Open the portal.",
-                next: "universeShift",
-
-                effect: {
-                    strangerRelationship: 5
-                }
-            },
-
-            {
-                text: "Don't do it.",
-                next: "badEnding"
-            }
-
-        ]
-
-    },
-
-
-    universeShift: {
-
-        speaker: "SYSTEM",
-
-        location: "TIMELINE BREACH",
-
-        character: "none",
-
-        text:
-            "TIMELINE SHIFT INITIATED...",
-
-        choices: [
-
-            {
-                text: "Continue.",
-                next: "universeTwo"
-            }
-
-        ]
-
-    },
-
-
-    universeTwo: {
-
-        speaker: "SYSTEM",
-
-        location: "UNIVERSE 02",
-
-        character: "alex",
-
-        text:
-            "UNIVERSE 02. TIMELINE STABILITY: 72%.",
-
-        choices: [
-
-            {
-                text: "Look for another version of yourself.",
-                next: "alternateAlex"
-            },
-
-            {
-                text: "Find the stranger.",
-                next: "strangerTwo"
-            }
-
-        ]
-
-    },
-
-
-    alternateAlex: {
-
-        speaker: "ALEX",
-
-        location: "UNIVERSE 02",
-
-        character: "alex",
-
-        text:
-            "Someone is standing across the street. They look exactly like you.",
-
-        choices: [
-
-            {
-                text: "Approach them.",
-                next: "endingOne"
-            },
-
-            {
-                text: "Hide.",
-                next: "endingTwo"
-            }
-
-        ]
-
-    },
-
-
-    strangerTwo: {
-
-        speaker: "STRANGER",
-
-        location: "UNIVERSE 02",
-
-        character: "stranger",
-
-        text:
-            "You finally made it.",
-
-        choices: [
-
-            {
-                text: "Made it where?",
-                next: "endingOne"
-            },
-
-            {
-                text: "What happened here?",
-                next: "endingTwo"
-            }
-
-        ]
-
-    },
-
-
-    badEnding: {
-
-        speaker: "SYSTEM",
-
-        location: "COLLAPSING TIMELINE",
-
-        character: "none",
-
-        text:
-            "TIMELINE COLLAPSE. UNIVERSE 01 HAS BEEN LOST.",
-
-        choices: [
-
-            {
-                text: "Restart Universe 01.",
-                next: "start"
-            }
-
-        ]
-
-    },
-
-
-    endingOne: {
-
-        speaker: "SYSTEM",
-
-        location: "UNIVERSE 02",
-
-        character: "alex",
-
-        text:
-            "Your choices have created a timeline that was never supposed to exist.",
-
-        choices: [
-
-            {
-                text: "Continue.",
-                next: "final"
-            }
-
-        ]
-
-    },
-
-
-    endingTwo: {
-
-        speaker: "SYSTEM",
-
-        location: "UNIVERSE 02",
-
-        character: "stranger",
-
-        text:
-            "Somewhere behind you, another version of yourself is watching.",
-
-        choices: [
-
-            {
-                text: "Turn around.",
-                next: "final"
-            }
-
-        ]
-
-    },
-
-
-    final: {
-
-        speaker: "SYSTEM",
-
-        location: "UNKNOWN",
-
-        character: "none",
-
-        text:
-            "THIS WAS ONLY THE FIRST UNIVERSE.",
-
-        choices: [
-
-            {
-                text: "Restart.",
-                next: "start"
-            }
-
-        ]
+        game.currentDimension =
+            starting.id;
 
     }
 
-};
+}
 
 
-/* =========================
-   HTML ELEMENTS
-========================= */
+/* =========================================
+   GET CURRENT DIMENSION
+========================================= */
 
-const dialogueText =
-    document.getElementById("dialogueText");
+function currentDimension() {
 
-const speaker =
-    document.getElementById("speaker");
+    return game.dimensions.find(
+        d =>
+            d.id ===
+            game.currentDimension
+    );
 
-const choicesContainer =
-    document.getElementById("choices");
-
-const background =
-    document.getElementById("background");
-
-const alex =
-    document.getElementById("alex");
-
-const stranger =
-    document.getElementById("stranger");
-
-const universeNumber =
-    document.getElementById("universeNumber");
-
-const alexRelationship =
-    document.getElementById("alexRelationship");
-
-const strangerRelationship =
-    document.getElementById("strangerRelationship");
-
-const timerContainer =
-    document.getElementById("timerContainer");
-
-const timerFill =
-    document.getElementById("timerFill");
-
-const saveMessage =
-    document.getElementById("saveMessage");
-
-const locationText =
-    document.getElementById("location");
+}
 
 
-/* =========================
-   LOAD SCENE
-========================= */
+/* =========================================
+   CREATE NEW BRANCH
+========================================= */
 
-function loadScene(sceneName) {
+function createBranch() {
 
-    const scene = story[sceneName];
+    const current =
+        currentDimension();
 
-    if (!scene) {
-
-        console.error(
-            "Scene not found:",
-            sceneName
+    const newDimension =
+        generateDimension(
+            current.id
         );
+
+    current.altered = true;
+
+    game.currentDimension =
+        newDimension.id;
+
+    game.generation++;
+
+    game.stability =
+        newDimension.stability;
+
+    saveGame();
+
+}
+
+
+/* =========================================
+   STORY GENERATION
+========================================= */
+
+function generateScene() {
+
+    const dimension =
+        currentDimension();
+
+    const possibleEvents = [];
+
+    /*
+    Major event chance increases
+    as the multiverse becomes unstable.
+    */
+
+    if (
+        Math.random() <
+        (100 - game.stability) / 150
+    ) {
+
+        triggerMultiverseEvent();
+
+    }
+
+
+    const eventText =
+        game.events.length > 0
+            ? game.events[
+                game.events.length - 1
+              ].name
+            : null;
+
+
+    let speaker =
+        Math.random() > .5
+            ? "ALEX"
+            : "STRANGER";
+
+
+    let text;
+
+
+    if (eventText) {
+
+        text =
+            `Something is wrong with ${dimension.id}. ` +
+            `The effects of ${eventText} are spreading ` +
+            `through this reality.`;
+
+    } else {
+
+        const situations = [
+
+            "You hear footsteps behind you.",
+
+            "A figure appears across the street.",
+
+            "The lights suddenly shut off.",
+
+            "A portal opens nearby.",
+
+            "Your device begins vibrating.",
+
+            "Someone calls your name.",
+
+            "The city suddenly freezes.",
+
+            "A version of you appears."
+
+        ];
+
+        text =
+            situations[
+                randomNumber(
+                    situations.length
+                )
+            ];
+
+    }
+
+
+    const choices =
+        generateChoices();
+
+
+    return {
+
+        speaker,
+
+        location:
+            dimension.location,
+
+        text,
+
+        choices
+
+    };
+
+}
+
+
+/* =========================================
+   PROCEDURAL CHOICES
+========================================= */
+
+function generateChoices() {
+
+    const templates = [
+
+        {
+            text: "Approach the stranger.",
+            effect: {
+                stranger: 8,
+                stability: -3
+            }
+        },
+
+        {
+            text: "Walk away.",
+            effect: {
+                stranger: -5,
+                stability: 2
+            }
+        },
+
+        {
+            text: "Investigate the anomaly.",
+            effect: {
+                stability: -8
+            }
+        },
+
+        {
+            text: "Use the device.",
+            effect: {
+                stability: -12
+            }
+        },
+
+        {
+            text: "Try to change the timeline.",
+            effect: {
+                stability: -15
+            }
+        },
+
+        {
+            text: "Trust Alex.",
+            effect: {
+                alex: 10
+            }
+        },
+
+        {
+            text: "Don't trust anyone.",
+            effect: {
+                alex: -4,
+                stranger: -4
+            }
+        },
+
+        {
+            text: "Go back to an earlier dimension.",
+            special: "map"
+        },
+
+        {
+            text: "Create a completely new branch.",
+            special: "branch"
+        },
+
+        {
+            text: "Wait and observe.",
+            effect: {
+                stability: 5
+            }
+        }
+
+    ];
+
+
+    /*
+    Pick four unique choices.
+    */
+
+    const shuffled =
+        [...templates]
+            .sort(
+                () =>
+                    Math.random() - .5
+            );
+
+
+    return shuffled
+        .slice(0, 4);
+}
+
+
+/* =========================================
+   CHOICE HANDLER
+========================================= */
+
+function chooseChoice(choice) {
+
+    game.choices.push({
+
+        dimension:
+            game.currentDimension,
+
+        text:
+            choice.text,
+
+        time:
+            Date.now()
+
+    });
+
+
+    if (choice.effect) {
+
+        if (choice.effect.alex) {
+
+            game.characters.alex +=
+                choice.effect.alex;
+
+        }
+
+        if (choice.effect.stranger) {
+
+            game.characters.stranger +=
+                choice.effect.stranger;
+
+        }
+
+        if (choice.effect.stability) {
+
+            game.stability +=
+                choice.effect.stability;
+
+        }
+
+    }
+
+
+    game.stability =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                game.stability
+            )
+        );
+
+
+    if (
+        choice.special ===
+        "branch"
+    ) {
+
+        createBranch();
+
+    }
+
+
+    if (
+        choice.special ===
+        "map"
+    ) {
+
+        openMap();
 
         return;
 
     }
 
 
-    /* Save current scene */
+    /*
+    If stability becomes dangerously low,
+    trigger a major event.
+    */
 
-    player.currentScene = sceneName;
+    if (
+        game.stability <= 20
+    ) {
 
+        triggerMultiverseEvent();
 
-    /* Universe */
-
-    universeNumber.textContent =
-        String(player.universe).padStart(2, "0");
-
-
-    /* Location */
-
-    locationText.textContent =
-        scene.location;
+    }
 
 
-    /* Speaker */
+    saveGame();
 
-    speaker.textContent =
+    showSave();
+
+    nextScene();
+
+}
+
+
+/* =========================================
+   NEXT SCENE
+========================================= */
+
+function nextScene() {
+
+    const scene =
+        generateScene();
+
+    renderScene(scene);
+
+}
+
+
+/* =========================================
+   MULTIVERSE EVENT
+========================================= */
+
+function triggerMultiverseEvent() {
+
+    const name =
+        events[
+            randomNumber(
+                events.length
+            )
+        ];
+
+
+    /*
+    Prevent the same event from being
+    triggered repeatedly.
+    */
+
+    if (
+        game.events.some(
+            e =>
+                e.name === name
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const event = {
+
+        name,
+
+        strength:
+            Math.floor(
+                20 +
+                Math.random() * 80
+            ),
+
+        created:
+            Date.now(),
+
+        affectedUniverses: []
+
+    };
+
+
+    /*
+    Affect most known dimensions.
+    */
+
+    game.dimensions.forEach(
+        dimension => {
+
+            if (
+                Math.random() < .75
+            ) {
+
+                dimension.stability -=
+                    Math.floor(
+                        event.strength / 10
+                    );
+
+                dimension.stability =
+                    Math.max(
+                        0,
+                        dimension.stability
+                    );
+
+                event.affectedUniverses
+                    .push(
+                        dimension.id
+                    );
+
+            }
+
+        }
+    );
+
+
+    game.events.push(
+        event
+    );
+
+
+    showEvent(
+        name
+    );
+
+    saveGame();
+
+}
+
+
+/* =========================================
+   RENDER SCENE
+========================================= */
+
+function renderScene(scene) {
+
+    document.getElementById(
+        "speaker"
+    ).textContent =
         scene.speaker;
 
-
-    /* Dialogue */
-
-    typeText(scene.text);
-
-
-    /* Character visibility */
-
-    alex.classList.add("hidden");
-    stranger.classList.add("hidden");
-
-    alex.classList.remove("active");
-    stranger.classList.remove("active");
-
-    alex.classList.add("inactive");
-    stranger.classList.add("inactive");
+    document.getElementById(
+        "dialogueText"
+    ).textContent =
+        scene.text;
 
 
-    if (scene.character === "alex") {
+    /*
+    Background
+    */
 
-        alex.classList.remove("hidden");
-        alex.classList.remove("inactive");
-        alex.classList.add("active");
+    const dimension =
+        currentDimension();
+
+    document.getElementById(
+        "background"
+    ).style.background =
+        `
+        radial-gradient(
+            circle at 50% 35%,
+            hsl(
+                ${randomNumber(360)},
+                35%,
+                25%
+            ),
+            #080810 58%,
+            #010103
+        )
+        `;
+
+
+    /*
+    Characters
+    */
+
+    const alex =
+        document.getElementById(
+            "alex"
+        );
+
+    const stranger =
+        document.getElementById(
+            "stranger"
+        );
+
+
+    alex.classList.add(
+        "hidden"
+    );
+
+    stranger.classList.add(
+        "hidden"
+    );
+
+
+    if (
+        scene.speaker ===
+        "ALEX"
+    ) {
+
+        alex.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        stranger.classList.remove(
+            "hidden"
+        );
 
     }
 
 
-    if (scene.character === "stranger") {
+    /*
+    Choices
+    */
 
-        stranger.classList.remove("hidden");
-        stranger.classList.remove("inactive");
-        stranger.classList.add("active");
+    const choices =
+        document.getElementById(
+            "choices"
+        );
 
-    }
-
-
-    /* Background */
-
-    changeBackground(scene.background);
-
-
-    /* Choices */
-
-    choicesContainer.innerHTML = "";
+    choices.innerHTML = "";
 
 
     scene.choices.forEach(
-        (choice, index) => {
+        choice => {
 
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            button.classList.add("choice");
+            button.className =
+                "choice";
 
             button.textContent =
                 choice.text;
 
-            button.onclick = () => {
+            button.onclick =
+                () =>
+                    chooseChoice(
+                        choice
+                    );
 
-                choose(
-                    choice,
-                    index
-                );
-
-            };
-
-            choicesContainer.appendChild(
+            choices.appendChild(
                 button
             );
 
@@ -1014,163 +744,650 @@ function loadScene(sceneName) {
     );
 
 
-    /* Timer */
+    updateUI();
 
-    if (scene.timed) {
+}
 
-        startTimer(scene.time);
 
-    } else {
+/* =========================================
+   UI
+========================================= */
 
-        stopTimer();
+function updateUI() {
+
+    document.getElementById(
+        "multiverseId"
+    ).textContent =
+        "MULTIVERSE #" +
+        game.multiverseId;
+
+
+    document.getElementById(
+        "dimensionName"
+    ).textContent =
+        game.currentDimension;
+
+
+    document.getElementById(
+        "stabilityFill"
+    ).style.width =
+        game.stability + "%";
+
+
+    document.getElementById(
+        "stabilityText"
+    ).textContent =
+        game.stability + "%";
+
+
+    document.getElementById(
+        "alexRelation"
+    ).style.width =
+        clamp(
+            game.characters.alex
+        ) + "%";
+
+
+    document.getElementById(
+        "strangerRelation"
+    ).style.width =
+        clamp(
+            game.characters.stranger
+        ) + "%";
+
+
+    updateEvents();
+
+}
+
+
+/* =========================================
+   EVENTS UI
+========================================= */
+
+function updateEvents() {
+
+    const list =
+        document.getElementById(
+            "eventList"
+        );
+
+
+    if (
+        game.events.length === 0
+    ) {
+
+        list.textContent =
+            "No major events detected.";
+
+        return;
 
     }
 
 
-    updateStats();
+    list.innerHTML =
+        game.events
+            .slice(-5)
+            .map(
+                event =>
+                    `<div>
+                        ⚠ ${event.name}
+                        <br>
+                        Affected:
+                        ${event.affectedUniverses.length}
+                        dimensions
+                    </div>`
+            )
+            .join("");
+
+}
+
+
+/* =========================================
+   EVENT WARNING
+========================================= */
+
+function showEvent(name) {
+
+    const warning =
+        document.getElementById(
+            "eventWarning"
+        );
+
+    document.getElementById(
+        "eventName"
+    ).textContent =
+        name;
+
+    warning.style.opacity =
+        "1";
+
+
+    setTimeout(
+        () => {
+
+            warning.style.opacity =
+                "0";
+
+        },
+        4000
+    );
+
+}
+
+
+/* =========================================
+   DIMENSION MAP
+========================================= */
+
+function openMap() {
+
+    closeOverlays();
+
+    const screen =
+        document.getElementById(
+            "mapScreen"
+        );
+
+    const list =
+        document.getElementById(
+            "dimensionList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    game.dimensions.forEach(
+        dimension => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "dimension-card";
+
+
+            card.innerHTML = `
+
+                <strong>
+                    UNIVERSE ${dimension.id}
+                </strong>
+
+                <br>
+
+                ${dimension.location}
+
+                <br>
+
+                Stability:
+                ${dimension.stability}%
+
+                <br>
+
+                ${
+                    dimension.id ===
+                    game.currentDimension
+                    ? "CURRENT"
+                    : "VISITED"
+                }
+
+            `;
+
+
+            card.onclick =
+                () => {
+
+                    travelTo(
+                        dimension.id
+                    );
+
+                };
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    screen.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================
+   TRAVEL BACK
+========================================= */
+
+function travelTo(id) {
+
+    const target =
+        game.dimensions.find(
+            d =>
+                d.id === id
+        );
+
+
+    if (!target) return;
+
+
+    game.currentDimension =
+        id;
+
+
+    game.stability =
+        target.stability;
+
+
+    /*
+    Returning to a previous dimension
+    allows the player to make a different
+    choice and create a new timeline.
+    */
+
+    target.altered = true;
+
 
     saveGame();
 
-}
+    closeOverlays();
 
-
-/* =========================
-   TYPEWRITER
-========================= */
-
-let typingTimer;
-
-function typeText(text) {
-
-    clearInterval(typingTimer);
-
-    dialogueText.textContent = "";
-
-    let index = 0;
-
-    typingTimer =
-        setInterval(() => {
-
-            dialogueText.textContent +=
-                text[index];
-
-            index++;
-
-            if (index >= text.length) {
-
-                clearInterval(
-                    typingTimer
-                );
-
-            }
-
-        }, 18);
+    nextScene();
 
 }
 
 
-/* =========================
-   CHOICE
-========================= */
+/* =========================================
+   STORYLINES
+========================================= */
 
-function choose(choice, index) {
+function openStorylines() {
 
-    clearInterval(typingTimer);
+    closeOverlays();
 
-    choicesContainer.innerHTML = "";
+    const screen =
+        document.getElementById(
+            "storyScreen"
+        );
 
-    applyEffects(
-        choice.effect
-    );
-
-    player.choices.push({
-        scene: player.currentScene,
-        choice: choice.text
-    });
-
-
-    /* Check special events */
-
-    if (
-        choice.next ===
-        "universeTwo"
-    ) {
-
-        player.universe = 2;
-
-    }
+    const list =
+        document.getElementById(
+            "storyList"
+        );
 
 
-    if (
-        choice.next ===
-        "universeShift"
-    ) {
+    list.innerHTML = `
 
-        player.universe++;
+        <div class="story-card">
 
-    }
+            <strong>
+                CURRENT STORYLINE
+            </strong>
+
+            <br><br>
+
+            ${game.storyline}
+
+            <br><br>
+
+            Multiverse #${game.multiverseId}
+
+            <br>
+
+            ${game.dimensions.length}
+            dimensions discovered.
+
+        </div>
+
+    `;
 
 
-    loadScene(
-        choice.next
+    screen.classList.remove(
+        "hidden"
     );
 
 }
 
 
-/* =========================
-   EFFECTS
-========================= */
+/* =========================================
+   NEW STORYLINE
+========================================= */
 
-function applyEffects(effect) {
+function newStoryline() {
 
-    if (!effect) return;
+    /*
+    Preserve the current multiverse
+    in the browser archive.
+    */
 
-
-    Object.keys(effect)
-        .forEach(key => {
-
-            if (
-                typeof player[key]
-                === "number"
-            ) {
-
-                player[key] +=
-                    effect[key];
-
-            }
-
-        });
+    archiveCurrentStoryline();
 
 
-    /* Keep stats between 0-100 */
+    game =
+        createFreshGame();
 
-    player.alexRelationship =
-        clamp(
-            player.alexRelationship
-        );
 
-    player.strangerRelationship =
-        clamp(
-            player.strangerRelationship
-        );
+    setupStartingDimension();
 
-    player.trust =
-        clamp(
-            player.trust
-        );
+    saveGame();
 
-    player.timelineStability =
-        clamp(
-            player.timelineStability
-        );
+    nextScene();
 
 }
 
 
-/* =========================
+/* =========================================
+   CREATE FRESH GAME
+========================================= */
+
+function createFreshGame() {
+
+    return {
+
+        multiverseId:
+            randomId(),
+
+        storyline:
+            themes[
+                randomNumber(
+                    themes.length
+                )
+            ],
+
+        currentDimension:
+            "01-A",
+
+        dimensions: [],
+
+        choices: [],
+
+        events: [],
+
+        characters: {
+
+            alex: 50,
+
+            stranger: 50
+
+        },
+
+        stability: 100,
+
+        currentScene: "start",
+
+        generation: 1
+
+    };
+
+}
+
+
+/* =========================================
+   ARCHIVE
+========================================= */
+
+function archiveCurrentStoryline() {
+
+    const archives =
+        JSON.parse(
+            localStorage.getItem(
+                "multiverseArchives"
+            ) || "[]"
+        );
+
+
+    archives.push(
+        game
+    );
+
+
+    /*
+    Keep previous storylines.
+    */
+
+    localStorage.setItem(
+        "multiverseArchives",
+        JSON.stringify(
+            archives
+        )
+    );
+
+}
+
+
+/* =========================================
+   HARD RESET
+========================================= */
+
+function hardReset() {
+
+    closeOverlays();
+
+    document.getElementById(
+        "resetTitle"
+    ).textContent =
+        "HARD RESET";
+
+
+    document.getElementById(
+        "resetDescription"
+    ).textContent =
+        "Start a completely new storyline. " +
+        "Your current storyline will be archived " +
+        "and can be recovered later.";
+
+
+    document.getElementById(
+        "resetScreen"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    window.resetType =
+        "hard";
+
+}
+
+
+/* =========================================
+   TRUE RESET
+========================================= */
+
+function trueReset() {
+
+    closeOverlays();
+
+    document.getElementById(
+        "resetTitle"
+    ).textContent =
+        "TRUE RESET";
+
+
+    document.getElementById(
+        "resetDescription"
+    ).textContent =
+        "WARNING: This deletes every known " +
+        "dimension, storyline, event, choice, " +
+        "and archive from this browser.";
+
+
+    document.getElementById(
+        "resetScreen"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    window.resetType =
+        "true";
+
+}
+
+
+/* =========================================
+   CONFIRM RESET
+========================================= */
+
+function confirmReset() {
+
+    if (
+        window.resetType ===
+        "hard"
+    ) {
+
+        newStoryline();
+
+    }
+
+
+    if (
+        window.resetType ===
+        "true"
+    ) {
+
+        localStorage.removeItem(
+            "multiverseSave"
+        );
+
+        localStorage.removeItem(
+            "multiverseArchives"
+        );
+
+
+        game =
+            createFreshGame();
+
+
+        setupStartingDimension();
+
+        saveGame();
+
+        closeOverlays();
+
+        nextScene();
+
+    }
+
+}
+
+
+/* =========================================
+   CLOSE WINDOWS
+========================================= */
+
+function closeOverlays() {
+
+    document.querySelectorAll(
+        ".overlay"
+    ).forEach(
+        overlay =>
+            overlay.classList.add(
+                "hidden"
+            )
+    );
+
+}
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+function saveGame() {
+
+    localStorage.setItem(
+        "multiverseSave",
+        JSON.stringify(
+            game
+        )
+    );
+
+}
+
+
+function loadGame() {
+
+    const saved =
+        localStorage.getItem(
+            "multiverseSave"
+        );
+
+
+    if (!saved) {
+
+        game =
+            createFreshGame();
+
+        setupStartingDimension();
+
+        saveGame();
+
+        return;
+
+    }
+
+
+    try {
+
+        game =
+            JSON.parse(
+                saved
+            );
+
+    }
+
+    catch {
+
+        game =
+            createFreshGame();
+
+        setupStartingDimension();
+
+    }
+
+}
+
+
+/* =========================================
+   SAVE INDICATOR
+========================================= */
+
+function showSave() {
+
+    const indicator =
+        document.getElementById(
+            "saveIndicator"
+        );
+
+
+    indicator.style.opacity =
+        "1";
+
+
+    setTimeout(
+        () => {
+
+            indicator.style.opacity =
+                "0";
+
+        },
+        1000
+    );
+
+}
+
+
+/* =========================================
    CLAMP
-========================= */
+========================================= */
 
 function clamp(number) {
 
@@ -1185,225 +1402,14 @@ function clamp(number) {
 }
 
 
-/* =========================
-   STATS
-========================= */
-
-function updateStats() {
-
-    alexRelationship.style.width =
-        player.alexRelationship + "%";
-
-    strangerRelationship.style.width =
-        player.strangerRelationship + "%";
-
-}
-
-
-/* =========================
-   BACKGROUNDS
-========================= */
-
-function changeBackground(type) {
-
-    if (type === "subway") {
-
-        background.style.background =
-            `
-            radial-gradient(
-                circle at 50% 35%,
-                #303050,
-                #10101b 55%,
-                #020204
-            )
-            `;
-
-    }
-
-    else {
-
-        background.style.background =
-            `
-            radial-gradient(
-                circle at 50% 40%,
-                #202040,
-                #080812 60%,
-                #020203
-            )
-            `;
-
-    }
-
-}
-
-
-/* =========================
-   TIMER
-========================= */
-
-let timerInterval;
-
-function startTimer(seconds) {
-
-    clearInterval(
-        timerInterval
-    );
-
-    timerContainer.style.display =
-        "block";
-
-    let remaining =
-        seconds;
-
-    timerFill.style.width =
-        "100%";
-
-
-    timerInterval =
-        setInterval(() => {
-
-            remaining -= 0.1;
-
-            const percent =
-                (remaining / seconds) * 100;
-
-            timerFill.style.width =
-                percent + "%";
-
-
-            if (remaining <= 0) {
-
-                clearInterval(
-                    timerInterval
-                );
-
-                timerContainer.style.display =
-                    "none";
-
-                /* Automatic consequence */
-
-                loadScene(
-                    "badEnding"
-                );
-
-            }
-
-        }, 100);
-
-}
-
-
-function stopTimer() {
-
-    clearInterval(
-        timerInterval
-    );
-
-    timerContainer.style.display =
-        "none";
-
-}
-
-
-/* =========================
-   SAVE
-========================= */
-
-function saveGame() {
-
-    localStorage.setItem(
-        "multiverseSave",
-        JSON.stringify(player)
-    );
-
-}
-
-
-function loadSave() {
-
-    const saved =
-        localStorage.getItem(
-            "multiverseSave"
-        );
-
-    if (!saved) return;
-
-    try {
-
-        player =
-            JSON.parse(saved);
-
-    }
-
-    catch {
-
-        console.log(
-            "Save file could not be loaded."
-        );
-
-    }
-
-}
-
-
-/* =========================
-   SAVE MESSAGE
-========================= */
-
-function showSaveMessage() {
-
-    saveMessage.style.opacity =
-        "1";
-
-    setTimeout(() => {
-
-        saveMessage.style.opacity =
-            "0";
-
-    }, 1200);
-
-}
-
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        const buttons =
-            document.querySelectorAll(
-                ".choice"
-            );
-
-        const number =
-            parseInt(
-                event.key
-            ) - 1;
-
-
-        if (
-            number >= 0 &&
-            number < buttons.length
-        ) {
-
-            buttons[number].click();
-
-        }
-
-    }
-);
-
-
-/* =========================
+/* =========================================
    START
-========================= */
+========================================= */
 
-loadSave();
+loadGame();
 
-loadScene(
-    player.currentScene ||
-    "start"
-);
+setupStartingDimension();
+
+updateUI();
+
+nextScene();
