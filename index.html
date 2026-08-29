@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Multiverse: Fractured</title>
 
     <style>
@@ -10,509 +12,219 @@
             box-sizing: border-box;
         }
 
-        html,
         body {
             margin: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #030308;
+            background: #050509;
             color: white;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        button {
-            font-family: inherit;
+            font-family: Arial, sans-serif;
         }
 
         #game {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background: #030308;
-        }
-
-        /* BACKGROUND */
-
-        #background {
-            position: absolute;
-            inset: 0;
+            min-height: 100vh;
+            padding: 30px;
             background:
                 radial-gradient(
-                    circle at 50% 40%,
-                    #30304a 0%,
-                    #151522 45%,
-                    #030308 100%
-                );
-            transition: background 0.7s ease;
-        }
-
-        #darkness {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background:
-                linear-gradient(
-                    to bottom,
-                    rgba(0,0,0,.72),
-                    transparent 30%,
-                    rgba(0,0,0,.95)
+                    circle at center,
+                    #27203a,
+                    #08080d 70%
                 );
         }
 
-        /* TOP */
-
-        #top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 20;
-
+        header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-
-            padding: 18px 24px;
-
-            background:
-                linear-gradient(
-                    rgba(0,0,0,.92),
-                    rgba(0,0,0,0)
-                );
+            align-items: center;
+            margin-bottom: 30px;
         }
 
         #title {
-            font-size: 15px;
+            font-size: 24px;
             font-weight: bold;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
         }
 
         #story {
+            color: #a96cff;
+            font-size: 12px;
             margin-top: 5px;
-            color: #777;
-            font-size: 9px;
-            letter-spacing: 2px;
         }
 
         #dimension {
-            text-align: center;
-        }
-
-        #dimension small {
-            display: block;
-            color: #777;
-            font-size: 8px;
-            letter-spacing: 3px;
+            text-align: right;
         }
 
         #dimensionNumber {
-            color: #c76cff;
-            font-size: 21px;
+            color: #c875ff;
+            font-size: 24px;
             font-weight: bold;
         }
 
-        /* LOCATION */
-
         #location {
-            position: absolute;
-            top: 105px;
-            left: 24px;
-            z-index: 15;
-
-            color: #999;
-            font-size: 9px;
-            letter-spacing: 4px;
-        }
-
-        /* CHARACTERS */
-
-        .character {
-            position: absolute;
-            bottom: 280px;
-
-            width: 170px;
-
-            text-align: center;
-
-            opacity: 0;
-            transform: translateY(15px);
-
-            transition:
-                opacity .35s ease,
-                transform .35s ease;
-
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .character.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #alex {
-            left: 17%;
-        }
-
-        #stranger {
-            right: 17%;
-        }
-
-        .characterBody {
-            width: 135px;
-            height: 220px;
-            margin: auto;
-
-            border-radius:
-                70px 70px 25px 25px;
-
-            box-shadow:
-                0 20px 60px rgba(0,0,0,.8);
-        }
-
-        .alexBody {
-            background:
-                radial-gradient(
-                    circle at 50% 17%,
-                    #c99d82 0 12%,
-                    transparent 12.5%
-                ),
-                linear-gradient(
-                    90deg,
-                    #202633,
-                    #526077,
-                    #202633
-                );
-        }
-
-        .strangerBody {
-            background:
-                radial-gradient(
-                    circle at 50% 17%,
-                    #111 0 13%,
-                    transparent 13.5%
-                ),
-                linear-gradient(
-                    90deg,
-                    #09090d,
-                    #393945,
-                    #09090d
-                );
-        }
-
-        .characterName {
-            margin-top: 8px;
-            color: #aaa;
-            font-size: 9px;
-            letter-spacing: 4px;
-        }
-
-        /* EVENT */
-
-        #event {
-            position: absolute;
-            top: 100px;
-            left: 50%;
-            z-index: 100;
-
-            transform:
-                translateX(-50%)
-                translateY(-10px);
-
-            padding: 10px 20px;
-
-            border: 1px solid #a64cff;
-
-            background: rgba(15,5,25,.96);
-
-            opacity: 0;
-            pointer-events: none;
-
-            transition:
-                opacity .3s ease,
-                transform .3s ease;
-
-            text-align: center;
-        }
-
-        #event.show {
-            opacity: 1;
-            transform:
-                translateX(-50%)
-                translateY(0);
-        }
-
-        #eventTitle {
-            color: #c66cff;
-            font-size: 8px;
+            color: #888;
             letter-spacing: 3px;
+            font-size: 12px;
+            margin-bottom: 20px;
         }
 
-        #eventName {
-            display: block;
-            margin-top: 4px;
-            font-size: 11px;
+        #scene {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        /* STATUS */
+        #character {
+            min-height: 100px;
+            padding: 25px;
+            margin-bottom: 20px;
 
-        #status {
-            position: absolute;
-            right: 18px;
-            top: 135px;
-            z-index: 25;
-
-            width: 165px;
-            padding: 12px;
-
-            background: rgba(5,5,10,.75);
-        }
-
-        .statusTitle {
-            margin-bottom: 7px;
-            color: #777;
-            font-size: 8px;
-            letter-spacing: 3px;
-        }
-
-        .bar {
-            height: 4px;
-            margin-bottom: 12px;
-            background: #292932;
-        }
-
-        .barFill {
-            width: 50%;
-            height: 100%;
-            background: #bd62ff;
-            transition: width .3s ease;
-        }
-
-        /* DIALOGUE */
-
-        #dialogue {
-            position: absolute;
-            left: 50%;
-            bottom: 15px;
-            z-index: 50;
-
-            width: min(850px, 76%);
-
-            transform: translateX(-50%);
-
-            padding: 20px 25px;
-
-            border-left: 2px solid #b45cff;
-
-            background:
-                linear-gradient(
-                    rgba(3,3,8,.15),
-                    rgba(3,3,8,.98)
-                );
-
-            box-shadow:
-                0 -20px 70px rgba(0,0,0,.7);
+            border: 1px solid #332b40;
+            background: rgba(10, 10, 18, .8);
         }
 
         #speaker {
-            margin-bottom: 8px;
-            color: #c76cff;
-            font-size: 11px;
+            color: #c875ff;
             font-weight: bold;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
         }
 
         #text {
-            min-height: 60px;
-            margin-bottom: 14px;
-
-            font-size: 17px;
-            line-height: 1.5;
+            font-size: 18px;
+            line-height: 1.6;
         }
-
-        /* CHOICES */
 
         #choices {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 10px;
         }
 
         .choice {
-            min-height: 48px;
-            padding: 11px 14px;
+            padding: 18px;
 
-            border: 1px solid #353541;
-
-            background: rgba(16,16,25,.97);
+            border: 1px solid #393044;
+            background: #111019;
             color: white;
 
             cursor: pointer;
 
             text-align: left;
-            font-size: 12px;
-
-            transition:
-                border-color .15s,
-                background .15s,
-                transform .15s;
-        }
-
-        .choice:hover {
-            border-color: #c267ff;
-            background: rgba(55,25,75,.97);
-            transform: translateX(3px);
-        }
-
-        .choice::before {
-            content: "◇ ";
-            color: #c76cff;
-        }
-
-        /* MENU */
-
-        #menu {
-            position: absolute;
-            left: 18px;
-            bottom: 18px;
-            z-index: 60;
-
-            width: 160px;
-
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .menuButton {
-            padding: 9px;
-
-            border: 1px solid #292934;
-
-            background: rgba(5,5,10,.95);
-            color: #aaa;
-
-            cursor: pointer;
-
-            text-align: left;
-            font-size: 9px;
+            font-size: 14px;
 
             transition: .15s;
         }
 
-        .menuButton:hover {
-            border-color: #bd62ff;
-            color: white;
+        .choice:hover {
+            border-color: #bd6cff;
+            background: #21152d;
         }
 
-        /* WINDOWS */
+        #controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-        #window {
-            position: absolute;
-            inset: 0;
-            z-index: 200;
+        .control {
+            padding: 12px 18px;
 
+            border: 1px solid #393044;
+            background: #0d0c13;
+            color: #aaa;
+
+            cursor: pointer;
+        }
+
+        .control:hover {
+            color: white;
+            border-color: #bd6cff;
+        }
+
+        #event {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            padding: 12px 25px;
+
+            background: #170d20;
+            border: 1px solid #bd6cff;
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition: opacity .3s;
+        }
+
+        #event.show {
+            opacity: 1;
+        }
+
+        #map {
             display: none;
-            align-items: center;
-            justify-content: center;
+
+            position: fixed;
+            inset: 0;
 
             background: rgba(0,0,0,.9);
+
+            align-items: center;
+            justify-content: center;
         }
 
-        #window.open {
+        #map.open {
             display: flex;
         }
 
-        #windowBox {
+        #mapBox {
             width: min(700px, 90%);
             max-height: 80vh;
             overflow-y: auto;
 
-            padding: 30px;
+            padding: 25px;
 
-            border: 1px solid #74429b;
-            background: #09090f;
+            background: #0b0a11;
+            border: 1px solid #75449a;
         }
 
-        #windowBox h2 {
-            color: #cf7aff;
-            letter-spacing: 4px;
+        .dimensionCard {
+            padding: 15px;
+            margin-top: 10px;
+
+            border: 1px solid #33303d;
+            cursor: pointer;
         }
 
-        .close {
+        .dimensionCard:hover {
+            border-color: #bd6cff;
+        }
+
+        #closeMap {
             float: right;
 
-            border: none;
             background: none;
-            color: #aaa;
+            border: none;
 
+            color: white;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
         }
 
-        .card {
-            margin-top: 8px;
-            padding: 14px;
-
-            border: 1px solid #30303b;
-
-            background: #11111a;
-
-            cursor: pointer;
-
-            font-size: 11px;
-            line-height: 1.7;
-        }
-
-        .card:hover {
-            border-color: #bd62ff;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 800px) {
-
-            #status,
-            #menu {
-                display: none;
-            }
-
-            #dialogue {
-                width: 94%;
-            }
-
+        @media(max-width: 700px) {
             #choices {
                 grid-template-columns: 1fr;
             }
 
-            #alex {
-                left: 2%;
+            #game {
+                padding: 15px;
             }
 
-            #stranger {
-                right: 2%;
-            }
-
-            .character {
-                bottom: 335px;
-            }
-
-            .characterBody {
-                width: 85px;
-                height: 145px;
-            }
-
-            #text {
-                font-size: 15px;
-            }
-
-            #location {
-                top: 90px;
+            #title {
+                font-size: 18px;
             }
         }
-
     </style>
 </head>
 
@@ -520,10 +232,7 @@
 
 <div id="game">
 
-    <div id="background"></div>
-    <div id="darkness"></div>
-
-    <div id="top">
+    <header>
 
         <div>
             <div id="title">
@@ -531,163 +240,92 @@
             </div>
 
             <div id="story">
-                LOADING TIMELINE...
+                THE FRACTURED REBELLION
             </div>
         </div>
 
         <div id="dimension">
-
-            <small>
-                DIMENSION
-            </small>
+            <small>DIMENSION</small>
 
             <div id="dimensionNumber">
-                --
+                01-A
+            </div>
+        </div>
+
+    </header>
+
+
+    <main id="scene">
+
+        <div id="location">
+            ABANDONED SUBWAY
+        </div>
+
+        <div id="character">
+
+            <div id="speaker">
+                SYSTEM
+            </div>
+
+            <div id="text">
+                Starting the multiverse...
             </div>
 
         </div>
 
-    </div>
-
-    <div id="location">
-        INITIALIZING...
-    </div>
-
-
-    <div id="alex" class="character">
-
-        <div class="characterBody alexBody"></div>
-
-        <div class="characterName">
-            ALEX
-        </div>
-
-    </div>
-
-
-    <div id="stranger" class="character">
-
-        <div class="characterBody strangerBody"></div>
-
-        <div class="characterName">
-            STRANGER
-        </div>
-
-    </div>
-
-
-    <div id="event">
-
-        <div id="eventTitle">
-            ⚠ MULTIVERSE EVENT
-        </div>
-
-        <span id="eventName">
-            UNKNOWN
-        </span>
-
-    </div>
-
-
-    <div id="status">
-
-        <div class="statusTitle">
-            REALITY STABILITY
-        </div>
-
-        <div class="bar">
-            <div
-                id="stabilityBar"
-                class="barFill">
-            </div>
-        </div>
-
-
-        <div class="statusTitle">
-            ALEX
-        </div>
-
-        <div class="bar">
-            <div
-                id="alexBar"
-                class="barFill">
-            </div>
-        </div>
-
-
-        <div class="statusTitle">
-            STRANGER
-        </div>
-
-        <div class="bar">
-            <div
-                id="strangerBar"
-                class="barFill">
-            </div>
-        </div>
-
-    </div>
-
-
-    <div id="menu">
-
-        <button
-            class="menuButton"
-            id="backtrackButton">
-            ↩ BACKTRACK
-        </button>
-
-        <button
-            class="menuButton"
-            id="mapButton">
-            🗺 DIMENSION MAP
-        </button>
-
-        <button
-            class="menuButton"
-            id="newStoryButton">
-            ✦ NEW STORYLINE
-        </button>
-
-        <button
-            class="menuButton"
-            id="resetButton">
-            ⟳ HARD RESET
-        </button>
-
-    </div>
-
-
-    <div id="dialogue">
-
-        <div id="speaker">
-            SYSTEM
-        </div>
-
-        <div id="text">
-            Starting...
-        </div>
 
         <div id="choices"></div>
 
+
+        <div id="controls">
+
+            <button
+                class="control"
+                id="backtrack">
+                ↩ Backtrack
+            </button>
+
+            <button
+                class="control"
+                id="mapButton">
+                🗺 Dimension Map
+            </button>
+
+            <button
+                class="control"
+                id="newStory">
+                ✦ New Storyline
+            </button>
+
+            <button
+                class="control"
+                id="reset">
+                ⟳ Hard Reset
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <div id="event">
+        MULTIVERSE EVENT
     </div>
 
 
-    <div id="window">
+    <div id="map">
 
-        <div id="windowBox">
+        <div id="mapBox">
 
-            <button
-                class="close"
-                id="closeWindow">
+            <button id="closeMap">
                 X
             </button>
 
-            <h2 id="windowTitle">
+            <h2>
                 DIMENSION MAP
             </h2>
 
-            <div id="windowContent"></div>
+            <div id="dimensionList"></div>
 
         </div>
 
@@ -700,3 +338,4 @@
 
 </body>
 </html>
+```
