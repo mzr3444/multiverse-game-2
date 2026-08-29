@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Multiverse: Fractured</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,61 +13,106 @@
 
 <div id="game">
 
+    <!-- BACKGROUND -->
+    <div id="background"></div>
+
+    <!-- CINEMATIC DARKENING -->
+    <div id="cinematic"></div>
+
+
     <!-- TOP HUD -->
-    <header class="hud">
+    <header id="topHUD">
 
         <div>
-            <h1>MULTIVERSE: FRACTURED</h1>
-            <small id="multiverseId">MULTIVERSE #0000</small>
+            <div class="title">
+                MULTIVERSE: FRACTURED
+            </div>
+
+            <div class="smallText" id="storylineName">
+                Loading storyline...
+            </div>
         </div>
 
-        <div class="hud-center">
-            <span>UNIVERSE</span>
-            <strong id="dimensionName">01-A</strong>
+
+        <div class="dimensionHUD">
+
+            <span>DIMENSION</span>
+
+            <strong id="dimensionName">
+                01-A
+            </strong>
+
         </div>
 
-        <div class="stability">
-            <span>REALITY STABILITY</span>
-            <div class="stability-bar">
+
+        <div class="stabilityHUD">
+
+            <span>REALITY</span>
+
+            <div class="stabilityBar">
                 <div id="stabilityFill"></div>
             </div>
-            <strong id="stabilityText">100%</strong>
+
+            <strong id="stabilityText">
+                100%
+            </strong>
+
         </div>
 
     </header>
 
 
-    <!-- MAIN SCENE -->
-    <section id="scene">
+    <!-- CHARACTER AREA -->
+    <div id="characterArea">
 
-        <div id="background"></div>
+        <div id="alex" class="character hidden">
 
-        <div id="eventWarning">
-            ⚠ MULTIVERSE EVENT
-            <span id="eventName"></span>
-        </div>
+            <div class="characterImage alexImage"></div>
 
-        <div id="characters">
-
-            <div id="alex" class="character hidden">
-                <div class="portrait alexPortrait"></div>
-                <div class="characterLabel">ALEX</div>
-            </div>
-
-            <div id="stranger" class="character hidden">
-                <div class="portrait strangerPortrait"></div>
-                <div class="characterLabel">STRANGER</div>
+            <div class="characterName">
+                ALEX
             </div>
 
         </div>
 
-    </section>
+
+        <div id="stranger" class="character hidden">
+
+            <div class="characterImage strangerImage"></div>
+
+            <div class="characterName">
+                STRANGER
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOCATION -->
+    <div id="location">
+        ABANDONED SUBWAY
+    </div>
+
+
+    <!-- EVENT WARNING -->
+    <div id="eventWarning">
+
+        <span>⚠ MULTIVERSE EVENT</span>
+
+        <strong id="eventName">
+            UNKNOWN
+        </strong>
+
+    </div>
 
 
     <!-- DIALOGUE -->
-    <section id="dialogue">
+    <section id="dialogueBox">
 
-        <div id="speaker">SYSTEM</div>
+        <div id="speaker">
+            SYSTEM
+        </div>
 
         <div id="dialogueText">
             Loading...
@@ -76,79 +123,99 @@
     </section>
 
 
-    <!-- LEFT MENU -->
-    <aside id="menu">
+    <!-- SIDE MENU -->
+    <div id="sideMenu">
 
         <button onclick="openMap()">
-            ◇ DIMENSION MAP
+            DIMENSION MAP
         </button>
 
         <button onclick="openStorylines()">
-            ◇ STORYLINES
+            STORYLINES
         </button>
 
         <button onclick="newStoryline()">
-            ◇ NEW STORYLINE
+            NEW STORYLINE
         </button>
 
         <button class="danger" onclick="hardReset()">
-            ⚠ HARD RESET
+            HARD RESET
         </button>
 
         <button class="danger" onclick="trueReset()">
-            ☠ TRUE RESET
+            TRUE RESET
         </button>
 
-    </aside>
+    </div>
 
 
-    <!-- RELATIONSHIPS -->
-    <aside id="relationships">
+    <!-- RELATIONSHIP PANEL -->
+    <div id="relationshipPanel">
 
-        <h3>RELATIONSHIPS</h3>
-
-        <div class="relationship">
-            <span>ALEX</span>
-            <div>
-                <div id="alexRelation"></div>
-            </div>
+        <div class="panelTitle">
+            RELATIONSHIPS
         </div>
 
         <div class="relationship">
-            <span>STRANGER</span>
-            <div>
-                <div id="strangerRelation"></div>
+
+            <span>Alex</span>
+
+            <div class="relationshipBar">
+                <div id="alexRelationship"></div>
             </div>
+
         </div>
 
-    </aside>
+
+        <div class="relationship">
+
+            <span>Stranger</span>
+
+            <div class="relationshipBar">
+                <div id="strangerRelationship"></div>
+            </div>
+
+        </div>
+
+    </div>
 
 
     <!-- EVENT PANEL -->
-    <aside id="events">
+    <div id="eventPanel">
 
-        <h3>ACTIVE EVENTS</h3>
-
-        <div id="eventList">
-            No major events detected.
+        <div class="panelTitle">
+            ACTIVE EVENTS
         </div>
 
-    </aside>
+        <div id="eventList">
+            No active multiverse events.
+        </div>
+
+    </div>
 
 
-    <!-- DIMENSION MAP -->
-    <div id="mapScreen" class="overlay hidden">
+    <!-- SAVE -->
+    <div id="saveMessage">
+        TIMELINE SAVED
+    </div>
 
-        <div class="panel">
 
-            <button class="close" onclick="closeOverlays()">X</button>
+    <!-- MAP -->
+    <div id="mapOverlay" class="overlay hidden">
+
+        <div class="window">
+
+            <button class="closeButton"
+                    onclick="closeWindows()">
+                X
+            </button>
 
             <h2>DIMENSION MAP</h2>
 
-            <p>
-                Visited dimensions can be revisited.
-                Returning to an earlier dimension can create
-                an entirely new branch.
+            <p class="windowDescription">
+                Return to any dimension you have
+                discovered. Changing a decision can
+                create a new branch.
             </p>
 
             <div id="dimensionList"></div>
@@ -159,11 +226,14 @@
 
 
     <!-- STORYLINES -->
-    <div id="storyScreen" class="overlay hidden">
+    <div id="storyOverlay" class="overlay hidden">
 
-        <div class="panel">
+        <div class="window">
 
-            <button class="close" onclick="closeOverlays()">X</button>
+            <button class="closeButton"
+                    onclick="closeWindows()">
+                X
+            </button>
 
             <h2>STORYLINES</h2>
 
@@ -174,12 +244,14 @@
     </div>
 
 
-    <!-- RESET CONFIRMATION -->
-    <div id="resetScreen" class="overlay hidden">
+    <!-- RESET -->
+    <div id="resetOverlay" class="overlay hidden">
 
-        <div class="panel">
+        <div class="window resetWindow">
 
-            <h2 id="resetTitle">RESET</h2>
+            <h2 id="resetTitle">
+                RESET
+            </h2>
 
             <p id="resetDescription"></p>
 
@@ -187,7 +259,7 @@
                 CONFIRM
             </button>
 
-            <button onclick="closeOverlays()">
+            <button onclick="closeWindows()">
                 CANCEL
             </button>
 
@@ -196,14 +268,9 @@
     </div>
 
 
-    <!-- SAVE INDICATOR -->
-    <div id="saveIndicator">
-        TIMELINE SAVED
-    </div>
+    <script src="game.js"></script>
 
 </div>
-
-<script src="game.js"></script>
 
 </body>
 </html>
