@@ -1,101 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiverse: Fractured</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background: #030308;
             color: white;
             font-family: Arial, Helvetica, sans-serif;
-            overflow: hidden;
+        }
+
+        button {
+            font-family: inherit;
         }
 
         #game {
+            position: relative;
             width: 100vw;
             height: 100vh;
-            position: relative;
             overflow: hidden;
+            background: #030308;
         }
+
+        /* BACKGROUND */
 
         #background {
             position: absolute;
             inset: 0;
-
             background:
                 radial-gradient(
-                    circle at center,
-                    #353552 0%,
-                    #141421 45%,
+                    circle at 50% 40%,
+                    #30304a 0%,
+                    #151522 45%,
                     #030308 100%
                 );
-
-            transition: 1s;
+            transition: background 0.7s ease;
         }
 
         #darkness {
             position: absolute;
             inset: 0;
-
+            pointer-events: none;
             background:
                 linear-gradient(
                     to bottom,
-                    rgba(0,0,0,.7),
+                    rgba(0,0,0,.72),
                     transparent 30%,
                     rgba(0,0,0,.95)
                 );
-
-            pointer-events: none;
         }
 
-        /* TOP BAR */
+        /* TOP */
 
         #top {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-
-            padding: 20px 25px;
+            right: 0;
+            z-index: 20;
 
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
 
-            z-index: 20;
+            padding: 18px 24px;
 
             background:
                 linear-gradient(
-                    rgba(0,0,0,.9),
-                    transparent
+                    rgba(0,0,0,.92),
+                    rgba(0,0,0,0)
                 );
         }
 
         #title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             letter-spacing: 4px;
         }
 
         #story {
+            margin-top: 5px;
             color: #777;
             font-size: 9px;
-            margin-top: 5px;
             letter-spacing: 2px;
         }
 
@@ -120,10 +117,8 @@
 
         #location {
             position: absolute;
-
             top: 105px;
-            left: 25px;
-
+            left: 24px;
             z-index: 15;
 
             color: #999;
@@ -135,57 +130,55 @@
 
         .character {
             position: absolute;
+            bottom: 280px;
 
-            bottom: 290px;
-
-            width: 180px;
+            width: 170px;
 
             text-align: center;
 
             opacity: 0;
+            transform: translateY(15px);
 
-            transition: .5s;
-
-            z-index: 5;
+            transition:
+                opacity .35s ease,
+                transform .35s ease;
 
             pointer-events: none;
+            z-index: 5;
         }
 
         .character.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
         #alex {
-            left: 18%;
+            left: 17%;
         }
 
         #stranger {
-            right: 18%;
+            right: 17%;
         }
 
         .characterBody {
-            width: 145px;
-            height: 230px;
-
+            width: 135px;
+            height: 220px;
             margin: auto;
 
             border-radius:
-                75px 75px 25px 25px;
+                70px 70px 25px 25px;
 
             box-shadow:
                 0 20px 60px rgba(0,0,0,.8);
         }
 
         .alexBody {
-
             background:
-
                 radial-gradient(
                     circle at 50% 17%,
                     #c99d82 0 12%,
                     transparent 12.5%
                 ),
-
                 linear-gradient(
                     90deg,
                     #202633,
@@ -195,15 +188,12 @@
         }
 
         .strangerBody {
-
             background:
-
                 radial-gradient(
                     circle at 50% 17%,
                     #111 0 13%,
                     transparent 13.5%
                 ),
-
                 linear-gradient(
                     90deg,
                     #09090d,
@@ -214,43 +204,44 @@
 
         .characterName {
             margin-top: 8px;
-
+            color: #aaa;
             font-size: 9px;
             letter-spacing: 4px;
-            color: #aaa;
         }
 
         /* EVENT */
 
         #event {
-
             position: absolute;
-
-            top: 105px;
+            top: 100px;
             left: 50%;
-
-            transform: translateX(-50%);
-
             z-index: 100;
+
+            transform:
+                translateX(-50%)
+                translateY(-10px);
 
             padding: 10px 20px;
 
             border: 1px solid #a64cff;
 
-            background:
-                rgba(15,5,25,.97);
+            background: rgba(15,5,25,.96);
 
             opacity: 0;
-
             pointer-events: none;
 
-            transition: .4s;
+            transition:
+                opacity .3s ease,
+                transform .3s ease;
 
             text-align: center;
         }
 
         #event.show {
             opacity: 1;
+            transform:
+                translateX(-50%)
+                translateY(0);
         }
 
         #eventTitle {
@@ -261,231 +252,173 @@
 
         #eventName {
             display: block;
-
             margin-top: 4px;
-
             font-size: 11px;
+        }
+
+        /* STATUS */
+
+        #status {
+            position: absolute;
+            right: 18px;
+            top: 135px;
+            z-index: 25;
+
+            width: 165px;
+            padding: 12px;
+
+            background: rgba(5,5,10,.75);
+        }
+
+        .statusTitle {
+            margin-bottom: 7px;
+            color: #777;
+            font-size: 8px;
+            letter-spacing: 3px;
+        }
+
+        .bar {
+            height: 4px;
+            margin-bottom: 12px;
+            background: #292932;
+        }
+
+        .barFill {
+            width: 50%;
+            height: 100%;
+            background: #bd62ff;
+            transition: width .3s ease;
         }
 
         /* DIALOGUE */
 
         #dialogue {
-
             position: absolute;
-
             left: 50%;
-            bottom: 18px;
-
-            transform: translateX(-50%);
+            bottom: 15px;
+            z-index: 50;
 
             width: min(850px, 76%);
 
-            z-index: 50;
+            transform: translateX(-50%);
 
             padding: 20px 25px;
 
+            border-left: 2px solid #b45cff;
+
             background:
                 linear-gradient(
-                    rgba(3,3,8,.2),
+                    rgba(3,3,8,.15),
                     rgba(3,3,8,.98)
                 );
-
-            border-left: 2px solid #b45cff;
 
             box-shadow:
                 0 -20px 70px rgba(0,0,0,.7);
         }
 
         #speaker {
-
-            color: #c76cff;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            letter-spacing: 4px;
-
             margin-bottom: 8px;
+            color: #c76cff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 4px;
         }
 
         #text {
-
             min-height: 60px;
+            margin-bottom: 14px;
 
             font-size: 17px;
-
             line-height: 1.5;
-
-            margin-bottom: 14px;
         }
 
         /* CHOICES */
 
         #choices {
-
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
         }
 
         .choice {
-
             min-height: 48px;
-
             padding: 11px 14px;
-
-            background:
-                rgba(16,16,25,.97);
-
-            color: white;
 
             border: 1px solid #353541;
 
-            text-align: left;
+            background: rgba(16,16,25,.97);
+            color: white;
 
             cursor: pointer;
 
+            text-align: left;
             font-size: 12px;
 
-            transition: .2s;
+            transition:
+                border-color .15s,
+                background .15s,
+                transform .15s;
         }
 
         .choice:hover {
-
             border-color: #c267ff;
-
-            background:
-                rgba(55,25,75,.97);
-
+            background: rgba(55,25,75,.97);
             transform: translateX(3px);
         }
 
         .choice::before {
-
             content: "◇ ";
-
             color: #c76cff;
         }
 
         /* MENU */
 
         #menu {
-
             position: absolute;
-
             left: 18px;
             bottom: 18px;
-
             z-index: 60;
 
             width: 160px;
 
             display: flex;
-
             flex-direction: column;
-
             gap: 5px;
         }
 
         .menuButton {
-
             padding: 9px;
-
-            background:
-                rgba(5,5,10,.95);
-
-            color: #aaa;
 
             border: 1px solid #292934;
 
+            background: rgba(5,5,10,.95);
+            color: #aaa;
+
             cursor: pointer;
 
+            text-align: left;
             font-size: 9px;
 
-            text-align: left;
+            transition: .15s;
         }
 
         .menuButton:hover {
-
-            color: white;
-
             border-color: #bd62ff;
+            color: white;
         }
 
-        /* STATUS */
-
-        #status {
-
-            position: absolute;
-
-            right: 18px;
-            top: 140px;
-
-            width: 165px;
-
-            z-index: 25;
-
-            padding: 12px;
-
-            background:
-                rgba(5,5,10,.75);
-
-            font-size: 9px;
-        }
-
-        .statusTitle {
-
-            color: #777;
-
-            font-size: 8px;
-
-            letter-spacing: 3px;
-
-            margin-bottom: 8px;
-        }
-
-        .bar {
-
-            height: 4px;
-
-            background: #292932;
-
-            margin-bottom: 12px;
-        }
-
-        .barFill {
-
-            height: 100%;
-
-            width: 50%;
-
-            background: #bd62ff;
-
-            transition: .4s;
-        }
-
-        /* POPUP WINDOW */
+        /* WINDOWS */
 
         #window {
-
             position: absolute;
-
             inset: 0;
-
             z-index: 200;
 
             display: none;
-
             align-items: center;
-
             justify-content: center;
 
-            background:
-                rgba(0,0,0,.9);
+            background: rgba(0,0,0,.9);
         }
 
         #window.open {
@@ -493,72 +426,55 @@
         }
 
         #windowBox {
-
             width: min(700px, 90%);
-
             max-height: 80vh;
-
             overflow-y: auto;
 
             padding: 30px;
 
-            background: #09090f;
-
             border: 1px solid #74429b;
+            background: #09090f;
         }
 
         #windowBox h2 {
-
             color: #cf7aff;
-
             letter-spacing: 4px;
         }
 
-        .card {
+        .close {
+            float: right;
 
+            border: none;
+            background: none;
+            color: #aaa;
+
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .card {
+            margin-top: 8px;
             padding: 14px;
 
-            margin-top: 8px;
+            border: 1px solid #30303b;
 
             background: #11111a;
-
-            border: 1px solid #30303b;
 
             cursor: pointer;
 
             font-size: 11px;
-
             line-height: 1.7;
         }
 
         .card:hover {
-
             border-color: #bd62ff;
-        }
-
-        .close {
-
-            float: right;
-
-            background: none;
-
-            color: #aaa;
-
-            border: none;
-
-            cursor: pointer;
-
-            font-size: 16px;
         }
 
         /* MOBILE */
 
-        @media(max-width: 800px) {
+        @media (max-width: 800px) {
 
-            #status {
-                display: none;
-            }
-
+            #status,
             #menu {
                 display: none;
             }
@@ -579,51 +495,45 @@
                 right: 2%;
             }
 
-            .characterBody {
-                width: 90px;
-                height: 150px;
+            .character {
+                bottom: 335px;
             }
 
-            .character {
-                bottom: 330px;
+            .characterBody {
+                width: 85px;
+                height: 145px;
             }
 
             #text {
                 font-size: 15px;
             }
 
+            #location {
+                top: 90px;
+            }
         }
 
     </style>
-
 </head>
-
 
 <body>
 
 <div id="game">
 
     <div id="background"></div>
-
     <div id="darkness"></div>
-
-
-    <!-- TOP -->
 
     <div id="top">
 
         <div>
-
             <div id="title">
                 MULTIVERSE: FRACTURED
             </div>
 
             <div id="story">
-                THE FRACTURED REBELLION
+                LOADING TIMELINE...
             </div>
-
         </div>
-
 
         <div id="dimension">
 
@@ -632,22 +542,17 @@
             </small>
 
             <div id="dimensionNumber">
-                01-A
+                --
             </div>
 
         </div>
 
     </div>
 
-
-    <!-- LOCATION -->
-
     <div id="location">
-        ABANDONED SUBWAY
+        INITIALIZING...
     </div>
 
-
-    <!-- CHARACTERS -->
 
     <div id="alex" class="character">
 
@@ -671,22 +576,18 @@
     </div>
 
 
-    <!-- MULTIVERSE EVENT -->
-
     <div id="event">
 
         <div id="eventTitle">
             ⚠ MULTIVERSE EVENT
         </div>
 
-        <div id="eventName">
-            THE FRACTURE
-        </div>
+        <span id="eventName">
+            UNKNOWN
+        </span>
 
     </div>
 
-
-    <!-- STATUS -->
 
     <div id="status">
 
@@ -695,12 +596,10 @@
         </div>
 
         <div class="bar">
-
             <div
                 id="stabilityBar"
                 class="barFill">
             </div>
-
         </div>
 
 
@@ -709,12 +608,10 @@
         </div>
 
         <div class="bar">
-
             <div
                 id="alexBar"
                 class="barFill">
             </div>
-
         </div>
 
 
@@ -723,60 +620,43 @@
         </div>
 
         <div class="bar">
-
             <div
                 id="strangerBar"
                 class="barFill">
             </div>
-
         </div>
 
     </div>
 
 
-    <!-- MENU -->
-
     <div id="menu">
 
         <button
             class="menuButton"
-            onclick="backtrack()">
-
+            id="backtrackButton">
             ↩ BACKTRACK
-
         </button>
-
 
         <button
             class="menuButton"
-            onclick="openMap()">
-
+            id="mapButton">
             🗺 DIMENSION MAP
-
         </button>
-
 
         <button
             class="menuButton"
-            onclick="newStory()">
-
+            id="newStoryButton">
             ✦ NEW STORYLINE
-
         </button>
-
 
         <button
             class="menuButton"
-            onclick="hardReset()">
-
+            id="resetButton">
             ⟳ HARD RESET
-
         </button>
 
     </div>
 
-
-    <!-- DIALOGUE -->
 
     <div id="dialogue">
 
@@ -785,7 +665,7 @@
         </div>
 
         <div id="text">
-            Loading...
+            Starting...
         </div>
 
         <div id="choices"></div>
@@ -793,18 +673,14 @@
     </div>
 
 
-    <!-- WINDOW -->
-
     <div id="window">
 
         <div id="windowBox">
 
             <button
                 class="close"
-                onclick="closeWindow()">
-
+                id="closeWindow">
                 X
-
             </button>
 
             <h2 id="windowTitle">
@@ -823,5 +699,4 @@
 <script src="game.js"></script>
 
 </body>
-
 </html>
