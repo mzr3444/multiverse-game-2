@@ -1,200 +1,94 @@
+```javascript
 "use strict";
 
 /*
-=========================================================
+==================================================
 MULTIVERSE: FRACTURED
-OPTIMIZED GAME ENGINE
-=========================================================
+SIMPLE / FAST VERSION
+==================================================
 */
 
 
-/* ======================================================
-   ELEMENT CACHE
+/* -----------------------------------------------
+   HTML ELEMENTS
+------------------------------------------------ */
 
-   We find the HTML elements ONCE instead of repeatedly
-   searching the page.
-====================================================== */
+const textElement =
+    document.getElementById("text");
 
-const UI = {
+const speakerElement =
+    document.getElementById("speaker");
 
-    background:
-        document.getElementById("background"),
+const locationElement =
+    document.getElementById("location");
 
-    story:
-        document.getElementById("story"),
+const choicesElement =
+    document.getElementById("choices");
 
-    dimension:
-        document.getElementById("dimensionNumber"),
+const storyElement =
+    document.getElementById("story");
 
-    location:
-        document.getElementById("location"),
+const dimensionElement =
+    document.getElementById("dimensionNumber");
 
-    speaker:
-        document.getElementById("speaker"),
+const eventElement =
+    document.getElementById("event");
 
-    text:
-        document.getElementById("text"),
+const mapElement =
+    document.getElementById("map");
 
-    choices:
-        document.getElementById("choices"),
-
-    alex:
-        document.getElementById("alex"),
-
-    stranger:
-        document.getElementById("stranger"),
-
-    event:
-        document.getElementById("event"),
-
-    eventName:
-        document.getElementById("eventName"),
-
-    stability:
-        document.getElementById("stabilityBar"),
-
-    alexBar:
-        document.getElementById("alexBar"),
-
-    strangerBar:
-        document.getElementById("strangerBar"),
-
-    window:
-        document.getElementById("window"),
-
-    windowTitle:
-        document.getElementById("windowTitle"),
-
-    windowContent:
-        document.getElementById("windowContent"),
-
-    backtrack:
-        document.getElementById("backtrackButton"),
-
-    map:
-        document.getElementById("mapButton"),
-
-    newStory:
-        document.getElementById("newStoryButton"),
-
-    reset:
-        document.getElementById("resetButton"),
-
-    closeWindow:
-        document.getElementById("closeWindow")
-
-};
+const dimensionList =
+    document.getElementById("dimensionList");
 
 
-/* ======================================================
-   DEFAULT GAME
-====================================================== */
+/* -----------------------------------------------
+   GAME DATA
+------------------------------------------------ */
 
-function createDefaultGame() {
+const scenes = {
 
-    return {
+    start: {
 
-        storyline:
-            "The Fractured Rebellion",
+        speaker: "SYSTEM",
 
-        dimension:
-            "01-A",
-
-        scene:
-            "intro",
-
-        stability:
-            100,
-
-        alex:
-            50,
-
-        stranger:
-            50,
-
-        dimensions: [
-
-            {
-                id:
-                    "01-A",
-
-                location:
-                    "Abandoned Subway",
-
-                stability:
-                    100,
-
-                story:
-                    "main"
-            }
-
-        ],
-
-        history: [],
-
-        events: [],
-
-        visited:
-            {}
-
-    };
-
-}
-
-
-/* ======================================================
-   GAME STATE
-====================================================== */
-
-let game =
-    createDefaultGame();
-
-
-/* ======================================================
-   MAIN STORY
-====================================================== */
-
-const mainScenes = {
-
-    intro: {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            "ABANDONED SUBWAY",
-
-        character:
-            "",
+        location: "ABANDONED SUBWAY",
 
         text:
-            "11:47 PM. You wake up on the floor of an abandoned subway station. There are no passengers. No trains. Your wrist is glowing.",
+            "11:47 PM. You wake up on the floor of an abandoned subway station. Your wrist is glowing.",
 
         choices: [
 
-            [
-                "Examine the device on your wrist.",
-                "device",
-                "stability:-5"
-            ],
+            {
+                text:
+                    "Examine the device on your wrist.",
 
-            [
-                "Search the station for another person.",
-                "search",
-                ""
-            ],
+                next:
+                    "device"
+            },
 
-            [
-                "Look for a way out.",
-                "exit",
-                ""
-            ],
+            {
+                text:
+                    "Search the station.",
 
-            [
-                "Stay still and listen.",
-                "footsteps",
-                ""
-            ]
+                next:
+                    "search"
+            },
+
+            {
+                text:
+                    "Look for an exit.",
+
+                next:
+                    "exit"
+            },
+
+            {
+                text:
+                    "Stay still and listen.",
+
+                next:
+                    "footsteps"
+            }
 
         ]
 
@@ -209,31 +103,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "alex",
-
         text:
             "The device displays one message: UNIVERSE 01-A. TIMELINE STABILITY: 95%.",
 
         choices: [
 
-            [
-                "Activate the device.",
-                "portal",
-                "stability:-15"
-            ],
+            {
+                text:
+                    "Activate the device.",
 
-            [
-                "Try to remove the device.",
-                "remove",
-                ""
-            ],
+                next:
+                    "portal"
+            },
 
-            [
-                "Leave it alone.",
-                "search",
-                ""
-            ]
+            {
+                text:
+                    "Try to remove it.",
+
+                next:
+                    "remove"
+            },
+
+            {
+                text:
+                    "Leave it alone.",
+
+                next:
+                    "search"
+            }
 
         ]
 
@@ -248,31 +145,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "alex",
-
         text:
-            "You search the empty station. A second set of footprints leads toward a dark maintenance tunnel.",
+            "You search the station. A second set of footprints leads toward a dark maintenance tunnel.",
 
         choices: [
 
-            [
-                "Follow the footprints.",
-                "tunnel",
-                ""
-            ],
+            {
+                text:
+                    "Follow the footprints.",
 
-            [
-                "Search the platform.",
-                "platform",
-                ""
-            ],
+                next:
+                    "tunnel"
+            },
 
-            [
-                "Call out to whoever made them.",
-                "stranger",
-                "stranger:5"
-            ]
+            {
+                text:
+                    "Search the platform.",
+
+                next:
+                    "platform"
+            },
+
+            {
+                text:
+                    "Call out.",
+
+                next:
+                    "stranger"
+            }
 
         ]
 
@@ -287,25 +187,26 @@ const mainScenes = {
         location:
             "SUBWAY EXIT",
 
-        character:
-            "alex",
-
         text:
             "You push open the exit door. Instead of the city, another subway station is waiting outside.",
 
         choices: [
 
-            [
-                "Step through the doorway.",
-                "portal",
-                ""
-            ],
+            {
+                text:
+                    "Step through.",
 
-            [
-                "Close the door.",
-                "footsteps",
-                ""
-            ]
+                next:
+                    "portal"
+            },
+
+            {
+                text:
+                    "Close the door.",
+
+                next:
+                    "footsteps"
+            }
 
         ]
 
@@ -320,31 +221,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "alex",
-
         text:
             "Footsteps echo through the station. Someone is walking toward you.",
 
         choices: [
 
-            [
-                "Call out: Who's there?",
-                "stranger",
-                "stranger:5"
-            ],
+            {
+                text:
+                    "Call out.",
 
-            [
-                "Hide behind a pillar.",
-                "stranger",
-                ""
-            ],
+                next:
+                    "stranger"
+            },
 
-            [
-                "Wait and see who appears.",
-                "stranger",
-                ""
-            ]
+            {
+                text:
+                    "Hide.",
+
+                next:
+                    "stranger"
+            },
+
+            {
+                text:
+                    "Wait.",
+
+                next:
+                    "stranger"
+            }
 
         ]
 
@@ -359,37 +263,42 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "Don't move. I need to know which version of you I'm talking to.",
 
         choices: [
 
-            [
-                "Ask what they mean.",
-                "explain",
-                "stranger:5"
-            ],
+            {
+                text:
+                    "What do you mean?",
 
-            [
-                "Ask who they are.",
-                "identity",
-                ""
-            ],
+                next:
+                    "explain"
+            },
 
-            [
-                "Back away slowly.",
-                "threat",
-                "stranger:-5"
-            ],
+            {
+                text:
+                    "Who are you?",
 
-            [
-                "Tell them you want answers.",
-                "explain",
-                ""
-            ]
+                next:
+                    "identity"
+            },
+
+            {
+                text:
+                    "Back away.",
+
+                next:
+                    "threat"
+            },
+
+            {
+                text:
+                    "I want answers.",
+
+                next:
+                    "explain"
+            }
 
         ]
 
@@ -404,31 +313,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "Every choice creates another version of reality. I've seen this station play out dozens of different ways.",
 
         choices: [
 
-            [
-                "Ask how many versions of you exist.",
-                "versions",
-                ""
-            ],
+            {
+                text:
+                    "How many versions of me exist?",
 
-            [
-                "Ask why they're here.",
-                "mission",
-                ""
-            ],
+                next:
+                    "versions"
+            },
 
-            [
-                "Ask what happens if reality collapses.",
-                "collapse",
-                ""
-            ]
+            {
+                text:
+                    "Why are you here?",
+
+                next:
+                    "mission"
+            },
+
+            {
+                text:
+                    "What happens if reality collapses?",
+
+                next:
+                    "collapse"
+            }
 
         ]
 
@@ -443,31 +355,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "Call me the Stranger. That's all you need to know for now.",
 
         choices: [
 
-            [
-                "Ask about the device.",
-                "deviceTruth",
-                ""
-            ],
+            {
+                text:
+                    "Tell me about the device.",
 
-            [
-                "Ask why they know about you.",
-                "versions",
-                ""
-            ],
+                next:
+                    "deviceTruth"
+            },
 
-            [
-                "Tell them you don't trust them.",
-                "threat",
-                "stranger:-10"
-            ]
+            {
+                text:
+                    "Why do you know about me?",
+
+                next:
+                    "versions"
+            },
+
+            {
+                text:
+                    "I don't trust you.",
+
+                next:
+                    "threat"
+            }
 
         ]
 
@@ -482,25 +397,26 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "If I wanted to hurt you, you wouldn't have heard me coming.",
 
         choices: [
 
-            [
-                "Lower your guard.",
-                "explain",
-                "stranger:5"
-            ],
+            {
+                text:
+                    "Lower your guard.",
 
-            [
-                "Run toward the exit.",
-                "exit",
-                ""
-            ]
+                next:
+                    "explain"
+            },
+
+            {
+                text:
+                    "Run.",
+
+                next:
+                    "exit"
+            }
 
         ]
 
@@ -515,31 +431,34 @@ const mainScenes = {
         location:
             "MAINTENANCE TUNNEL",
 
-        character:
-            "alex",
-
         text:
             "The footprints stop at a metal door. Written across it are four words: YOU HAVE DONE THIS BEFORE.",
 
         choices: [
 
-            [
-                "Open the door.",
-                "portal",
-                ""
-            ],
+            {
+                text:
+                    "Open the door.",
 
-            [
-                "Touch the writing.",
-                "memory",
-                "stability:-8"
-            ],
+                next:
+                    "portal"
+            },
 
-            [
-                "Go back.",
-                "footsteps",
-                ""
-            ]
+            {
+                text:
+                    "Touch the writing.",
+
+                next:
+                    "memory"
+            },
+
+            {
+                text:
+                    "Go back.",
+
+                next:
+                    "footsteps"
+            }
 
         ]
 
@@ -554,31 +473,34 @@ const mainScenes = {
         location:
             "SUBWAY PLATFORM",
 
-        character:
-            "alex",
-
         text:
             "You find an old newspaper. The date is tomorrow. The headline says: CITY VANISHES WITHOUT WARNING.",
 
         choices: [
 
-            [
-                "Keep the newspaper.",
-                "memory",
-                ""
-            ],
+            {
+                text:
+                    "Keep the newspaper.",
 
-            [
-                "Show it to the Stranger.",
-                "stranger",
-                ""
-            ],
+                next:
+                    "memory"
+            },
 
-            [
-                "Search for another newspaper.",
-                "search",
-                ""
-            ]
+            {
+                text:
+                    "Show the Stranger.",
+
+                next:
+                    "stranger"
+            },
+
+            {
+                text:
+                    "Search for another newspaper.",
+
+                next:
+                    "search"
+            }
 
         ]
 
@@ -593,25 +515,26 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "alex",
-
         text:
             "The device refuses to detach. A warning appears: REMOVAL MAY DESTABILIZE TIMELINE.",
 
         choices: [
 
-            [
-                "Keep trying.",
-                "collapse",
-                "stability:-20"
-            ],
+            {
+                text:
+                    "Keep trying.",
 
-            [
-                "Stop.",
-                "search",
-                ""
-            ]
+                next:
+                    "collapse"
+            },
+
+            {
+                text:
+                    "Stop.",
+
+                next:
+                    "search"
+            }
 
         ]
 
@@ -626,31 +549,34 @@ const mainScenes = {
         location:
             "DIMENSIONAL BREACH",
 
-        character:
-            "",
-
         text:
-            "The device opens a tear in reality. Beyond it is a city that looks almost exactly like yours.",
+            "A tear opens in reality. Beyond it is a city that looks almost exactly like yours.",
 
         choices: [
 
-            [
-                "Enter the new dimension.",
-                "newDimension",
-                ""
-            ],
+            {
+                text:
+                    "Enter the new dimension.",
 
-            [
-                "Close the portal.",
-                "footsteps",
-                ""
-            ],
+                next:
+                    "newDimension"
+            },
 
-            [
-                "Ask the Stranger to go first.",
-                "stranger",
-                "stranger:-5"
-            ]
+            {
+                text:
+                    "Close the portal.",
+
+                next:
+                    "footsteps"
+            },
+
+            {
+                text:
+                    "Ask the Stranger to go first.",
+
+                next:
+                    "stranger"
+            }
 
         ]
 
@@ -665,25 +591,26 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "Too many. Some are heroes. Some are monsters. One version of you may be responsible for the collapse.",
 
         choices: [
 
-            [
-                "Ask how to find them.",
-                "alternate",
-                ""
-            ],
+            {
+                text:
+                    "How do I find them?",
 
-            [
-                "Ask why they haven't stopped them.",
-                "mission",
-                ""
-            ]
+                next:
+                    "alternate"
+            },
+
+            {
+                text:
+                    "Why haven't you stopped them?",
+
+                next:
+                    "mission"
+            }
 
         ]
 
@@ -698,31 +625,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "I'm trying to prevent a multiverse event. If it happens, the damage won't stay in this universe.",
 
         choices: [
 
-            [
-                "Ask what the event is.",
-                "event",
-                ""
-            ],
+            {
+                text:
+                    "What event?",
 
-            [
-                "Offer to help.",
-                "event",
-                "stranger:12"
-            ],
+                next:
+                    "event"
+            },
 
-            [
-                "Tell them you want to leave.",
-                "exit",
-                ""
-            ]
+            {
+                text:
+                    "I'll help.",
+
+                next:
+                    "event"
+            },
+
+            {
+                text:
+                    "I want to leave.",
+
+                next:
+                    "exit"
+            }
 
         ]
 
@@ -737,31 +667,34 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "",
-
         text:
             "The lights flicker. The walls distort. For a moment, the station exists in two places at once.",
 
         choices: [
 
-            [
-                "Stabilize reality.",
-                "stable",
-                "stability:15"
-            ],
+            {
+                text:
+                    "Stabilize reality.",
 
-            [
-                "Open a portal.",
-                "newDimension",
-                "stability:-15"
-            ],
+                next:
+                    "stable"
+            },
 
-            [
-                "Do nothing.",
-                "event",
-                ""
-            ]
+            {
+                text:
+                    "Open a portal.",
+
+                next:
+                    "newDimension"
+            },
+
+            {
+                text:
+                    "Do nothing.",
+
+                next:
+                    "event"
+            }
 
         ]
 
@@ -776,25 +709,26 @@ const mainScenes = {
         location:
             "DIMENSIONAL CORE",
 
-        character:
-            "alex",
-
         text:
-            "The device absorbs the dimensional energy. Reality stops shaking... temporarily.",
+            "Reality stops shaking... temporarily.",
 
         choices: [
 
-            [
-                "Ask what happens next.",
-                "mission",
-                ""
-            ],
+            {
+                text:
+                    "Ask what happens next.",
 
-            [
-                "Investigate the energy.",
-                "event",
-                ""
-            ]
+                next:
+                    "mission"
+            },
+
+            {
+                text:
+                    "Investigate the energy.",
+
+                next:
+                    "event"
+            }
 
         ]
 
@@ -809,25 +743,26 @@ const mainScenes = {
         location:
             "UNKNOWN",
 
-        character:
-            "alex",
-
         text:
             "A memory flashes through your mind. You've stood here before. But you don't remember this universe.",
 
         choices: [
 
-            [
-                "Try to remember.",
-                "alternate",
-                "stability:-5"
-            ],
+            {
+                text:
+                    "Try to remember.",
 
-            [
-                "Ignore the memory.",
-                "stranger",
-                ""
-            ]
+                next:
+                    "alternate"
+            },
+
+            {
+                text:
+                    "Ignore it.",
+
+                next:
+                    "stranger"
+            }
 
         ]
 
@@ -842,38 +777,41 @@ const mainScenes = {
         location:
             "UNKNOWN DIMENSION",
 
-        character:
-            "alex",
-
         text:
             "Across the street stands another version of you. They look directly at you like they've been waiting.",
 
         choices: [
 
-            [
-                "Approach them.",
-                "meetAlternate",
-                ""
-            ],
+            {
+                text:
+                    "Approach them.",
 
-            [
-                "Watch from a distance.",
-                "event",
-                ""
-            ],
+                next:
+                    "otherAlex"
+            },
 
-            [
-                "Leave.",
-                "return",
-                ""
-            ]
+            {
+                text:
+                    "Watch from a distance.",
+
+                next:
+                    "event"
+            },
+
+            {
+                text:
+                    "Leave.",
+
+                next:
+                    "newDimension"
+            }
 
         ]
 
     },
 
 
-    meetAlternate: {
+    otherAlex: {
 
         speaker:
             "OTHER ALEX",
@@ -881,31 +819,34 @@ const mainScenes = {
         location:
             "UNKNOWN DIMENSION",
 
-        character:
-            "alex",
-
         text:
             "You're late. I was beginning to think you weren't coming.",
 
         choices: [
 
-            [
-                "Ask what they know.",
-                "event",
-                ""
-            ],
+            {
+                text:
+                    "What do you know?",
 
-            [
-                "Ask why they were waiting.",
-                "event",
-                ""
-            ],
+                next:
+                    "event"
+            },
 
-            [
-                "Ask how to return.",
-                "return",
-                ""
-            ]
+            {
+                text:
+                    "Why were you waiting?",
+
+                next:
+                    "event"
+            },
+
+            {
+                text:
+                    "How do I return?",
+
+                next:
+                    "return"
+            }
 
         ]
 
@@ -920,25 +861,26 @@ const mainScenes = {
         location:
             "ABANDONED SUBWAY",
 
-        character:
-            "stranger",
-
         text:
             "That device isn't a phone. It's a key. Someone built it to open doors between realities.",
 
         choices: [
 
-            [
-                "Ask who built it.",
-                "event",
-                ""
-            ],
+            {
+                text:
+                    "Who built it?",
 
-            [
-                "Ask where the key leads.",
-                "newDimension",
-                ""
-            ]
+                next:
+                    "event"
+            },
+
+            {
+                text:
+                    "Where does the key lead?",
+
+                next:
+                    "newDimension"
+            }
 
         ]
 
@@ -953,31 +895,34 @@ const mainScenes = {
         location:
             "MULTIVERSE",
 
-        character:
-            "",
-
         text:
-            "⚠ A MASSIVE DISTURBANCE HAS APPEARED. Multiple dimensions are experiencing the same event at the same time.",
+            "A MASSIVE DISTURBANCE HAS APPEARED. Multiple dimensions are experiencing the same event at the same time.",
 
         choices: [
 
-            [
-                "Investigate the affected dimensions.",
-                "eventAfter",
-                ""
-            ],
+            {
+                text:
+                    "Investigate the affected dimensions.",
 
-            [
-                "Travel to another universe.",
-                "newDimension",
-                ""
-            ],
+                next:
+                    "eventAfter"
+            },
 
-            [
-                "Try to stop it.",
-                "eventControl",
-                "stability:-10"
-            ]
+            {
+                text:
+                    "Travel to another universe.",
+
+                next:
+                    "newDimension"
+            },
+
+            {
+                text:
+                    "Try to stop it.",
+
+                next:
+                    "eventControl"
+            }
 
         ]
 
@@ -992,25 +937,26 @@ const mainScenes = {
         location:
             "MULTIVERSE",
 
-        character:
-            "",
-
         text:
-            "Your device displays a map of the multiverse. Most dimensions are flashing red. One dimension appears to be causing the disturbance.",
+            "Your device displays a map of the multiverse. Most dimensions are flashing red.",
 
         choices: [
 
-            [
-                "Go to the source.",
-                "newDimension",
-                ""
-            ],
+            {
+                text:
+                    "Go to the source.",
 
-            [
-                "Return to your original dimension.",
-                "return",
-                ""
-            ]
+                next:
+                    "newDimension"
+            },
+
+            {
+                text:
+                    "Return home.",
+
+                next:
+                    "return"
+            }
 
         ]
 
@@ -1025,31 +971,34 @@ const mainScenes = {
         location:
             "DIMENSIONAL CORE",
 
-        character:
-            "",
-
         text:
-            "The device connects to the event. For a moment, you can feel millions of universes around you.",
+            "You connect to the event. For a moment, you can feel millions of universes around you.",
 
         choices: [
 
-            [
-                "Push the event away.",
-                "success",
-                "stability:20"
-            ],
+            {
+                text:
+                    "Push the event away.",
 
-            [
-                "Redirect it.",
-                "success",
-                "stability:10"
-            ],
+                next:
+                    "success"
+            },
 
-            [
-                "Absorb the event.",
-                "failure",
-                "stability:-30"
-            ]
+            {
+                text:
+                    "Redirect it.",
+
+                next:
+                    "success"
+            },
+
+            {
+                text:
+                    "Absorb the event.",
+
+                next:
+                    "failure"
+            }
 
         ]
 
@@ -1064,25 +1013,26 @@ const mainScenes = {
         location:
             "MULTIVERSE",
 
-        character:
-            "",
-
         text:
             "The fracture slows. Thousands of timelines stabilize. But something on the other side noticed you.",
 
         choices: [
 
-            [
-                "Find out what noticed you.",
-                "alternate",
-                ""
-            ],
+            {
+                text:
+                    "Find out what noticed you.",
 
-            [
-                "Return home.",
-                "return",
-                ""
-            ]
+                next:
+                    "alternate"
+            },
+
+            {
+                text:
+                    "Return home.",
+
+                next:
+                    "return"
+            }
 
         ]
 
@@ -1097,25 +1047,26 @@ const mainScenes = {
         location:
             "COLLAPSING REALITY",
 
-        character:
-            "",
-
         text:
             "The device overloads. Your universe begins collapsing around you.",
 
         choices: [
 
-            [
-                "Escape.",
-                "newDimension",
-                ""
-            ],
+            {
+                text:
+                    "Escape.",
 
-            [
-                "Try again.",
-                "eventControl",
-                ""
-            ]
+                next:
+                    "newDimension"
+            },
+
+            {
+                text:
+                    "Try again.",
+
+                next:
+                    "eventControl"
+            }
 
         ]
 
@@ -1130,854 +1081,484 @@ const mainScenes = {
         location:
             "PREVIOUS DIMENSION",
 
-        character:
-            "",
-
         text:
             "You return to a dimension you've visited before. Everything looks familiar... except one important detail has changed.",
 
         choices: [
 
-            [
-                "Investigate.",
-                "memory",
-                ""
-            ],
-
-            [
-                "Find the Stranger.",
-                "stranger",
-                ""
-            ],
-
-            [
-                "Leave again.",
-                "newDimension",
-                ""
-            ]
-
-        ]
-
-    }
-
-};
-
-
-/* ======================================================
-   SILENT CITY — COMPLETELY DIFFERENT STORYLINE
-====================================================== */
-
-const silentScenes = {
-
-    start: {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            "DIMENSION 73-Z",
-
-        character:
-            "",
-
-        text:
-            "You arrive in Dimension 73-Z. The city looks normal. Cars are parked everywhere. Lights are on. But there isn't a single person anywhere.",
-
-        choices: [
-
-            [
-                "Enter the nearest building.",
-                "building",
-                ""
-            ],
-
-            [
-                "Walk toward the city center.",
-                "center",
-                ""
-            ],
-
-            [
-                "Search the parked cars.",
-                "cars",
-                ""
-            ],
-
-            [
-                "Call out to see if anyone answers.",
-                "call",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    building: {
-
-        speaker:
-            "ALEX",
-
-        location:
-            "ABANDONED APARTMENT",
-
-        character:
-            "alex",
-
-        text:
-            "Dinner is still sitting on the table. A television is playing a news report, but the reporter isn't speaking. They're staring directly at you.",
-
-        choices: [
-
-            [
-                "Turn off the television.",
-                "tv",
-                ""
-            ],
-
-            [
-                "Watch the report.",
-                "report",
-                ""
-            ],
-
-            [
-                "Search the apartment.",
-                "note",
-                ""
-            ],
-
-            [
-                "Leave.",
-                "center",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    tv: {
-
-        speaker:
-            "TELEVISION",
-
-        location:
-            "ABANDONED APARTMENT",
-
-        character:
-            "",
-
-        text:
-            "The television turns itself back on. The reporter finally speaks: 'If you're seeing this message, you're not from this dimension.'",
-
-        choices: [
-
-            [
-                "Ask who created the message.",
-                "report",
-                ""
-            ],
-
-            [
-                "Unplug the television.",
-                "power",
-                ""
-            ],
-
-            [
-                "Keep watching.",
-                "report",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    report: {
-
-        speaker:
-            "TELEVISION",
-
-        location:
-            "ABANDONED APARTMENT",
-
-        character:
-            "",
-
-        text:
-            "The reporter looks terrified. 'The people of this universe didn't disappear. They were moved somewhere else. And whatever moved them knows you're here.'",
-
-        choices: [
-
-            [
-                "Ask where they were moved.",
-                "underground",
-                ""
-            ],
-
-            [
-                "Ask who moved them.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Destroy the television.",
-                "power",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    note: {
-
-        speaker:
-            "ALEX",
-
-        location:
-            "ABANDONED APARTMENT",
-
-        character:
-            "alex",
-
-        text:
-            "You find a handwritten note underneath the table. It says: DON'T TRUST THE PERSON WHO LOOKS LIKE YOU.",
-
-        choices: [
-
-            [
-                "Take the note.",
-                "center",
-                ""
-            ],
-
-            [
-                "Search for whoever wrote it.",
-                "underground",
-                ""
-            ],
-
-            [
-                "Ignore the warning.",
-                "center",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    power: {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            "ABANDONED APARTMENT",
-
-        character:
-            "",
-
-        text:
-            "The television explodes into static. For half a second, you see hundreds of people standing in a completely white room.",
-
-        choices: [
-
-            [
-                "Follow the signal.",
-                "underground",
-                ""
-            ],
-
-            [
-                "Leave.",
-                "center",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    center: {
-
-        speaker:
-            "ALEX",
-
-        location:
-            "CITY CENTER",
-
-        character:
-            "alex",
-
-        text:
-            "Every traffic light suddenly turns green. Then thousands of empty cars start moving through the streets by themselves.",
-
-        choices: [
-
-            [
-                "Follow the cars.",
-                "cars",
-                ""
-            ],
-
-            [
-                "Run into the subway.",
-                "underground",
-                ""
-            ],
-
-            [
-                "Stay in the street.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Hide inside a building.",
-                "building",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    cars: {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            "CITY STREET",
-
-        character:
-            "",
-
-        text:
-            "You search one of the cars. The radio turns on by itself. A voice whispers: 'Dimension 73-Z is no longer considered inhabited.'",
-
-        choices: [
-
-            [
-                "Ask who is speaking.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Trace the radio signal.",
-                "underground",
-                ""
-            ],
-
-            [
-                "Get out.",
-                "center",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    call: {
-
-        speaker:
-            "ALEX",
-
-        location:
-            "EMPTY CITY",
-
-        character:
-            "alex",
-
-        text:
-            "Your voice echoes between the buildings. Then someone answers from directly behind you.",
-
-        choices: [
-
-            [
-                "Turn around.",
-                "double",
-                ""
-            ],
-
-            [
-                "Run.",
-                "center",
-                ""
-            ],
-
-            [
-                "Ask who they are.",
-                "double",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    double: {
-
-        speaker:
-            "OTHER ALEX",
-
-        location:
-            "CITY STREET",
-
-        character:
-            "stranger",
-
-        text:
-            "You turn around and see yourself. The other you smiles. 'You shouldn't have come here.'",
-
-        choices: [
-
-            [
-                "Ask what happened.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Ask why they look like you.",
-                "doubleTruth",
-                ""
-            ],
-
-            [
-                "Attack them.",
-                "fight",
-                ""
-            ],
-
-            [
-                "Trust them.",
-                "underground",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    doubleTruth: {
-
-        speaker:
-            "OTHER ALEX",
-
-        location:
-            "CITY STREET",
-
-        character:
-            "stranger",
-
-        text:
-            "The other you looks at your wrist device. 'Because you're not the first version of yourself to arrive here.'",
-
-        choices: [
-
-            [
-                "Ask where the others went.",
-                "underground",
-                ""
-            ],
-
-            [
-                "Ask how many versions exist.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Demand answers.",
-                "entity",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    fight: {
-
-        speaker:
-            "OTHER ALEX",
-
-        location:
-            "CITY STREET",
-
-        character:
-            "stranger",
-
-        text:
-            "The other you doesn't fight back. They simply touch your wrist device. Suddenly the entire city disappears.",
-
-        choices: [
-
-            [
-                "Ask what they did.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Activate your device.",
-                "underground",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    underground: {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            "SUBWAY BENEATH 73-Z",
-
-        character:
-            "",
-
-        text:
-            "You descend beneath the city. The tunnels are filled with doors. Every door has a different universe number written across it.",
-
-        choices: [
-
-            [
-                "Open Door 73-Z.",
-                "entity",
-                ""
-            ],
-
-            [
-                "Open Door 01-A.",
-                "return",
-                ""
-            ],
-
-            [
-                "Open a random door.",
-                "newDimension",
-                ""
-            ],
-
-            [
-                "Ask the other Alex which door to use.",
-                "double",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    entity: {
-
-        speaker:
-            "THE ARCHIVIST",
-
-        location:
-            "THE WHITE ROOM",
-
-        character:
-            "stranger",
-
-        text:
-            "A figure appears in the white room. 'Every universe eventually asks the same question: who created the multiverse?'",
-
-        choices: [
-
-            [
-                "Ask who created it.",
-                "truth",
-                ""
-            ],
-
-            [
-                "Ask what happened to the people.",
-                "people",
-                ""
-            ],
-
-            [
-                "Ask why you were brought here.",
-                "reason",
-                ""
-            ],
-
-            [
-                "Refuse to answer.",
-                "entity",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    truth: {
-
-        speaker:
-            "THE ARCHIVIST",
-
-        location:
-            "THE WHITE ROOM",
-
-        character:
-            "stranger",
-
-        text:
-            "The Archivist looks directly at you. 'You.'",
-
-        choices: [
-
-            [
-                "Tell them that's impossible.",
-                "reason",
-                ""
-            ],
-
-            [
-                "Ask which version of you.",
-                "reason",
-                ""
-            ],
-
-            [
-                "Demand to see the original.",
-                "newDimension",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    people: {
-
-        speaker:
-            "THE ARCHIVIST",
-
-        location:
-            "THE WHITE ROOM",
-
-        character:
-            "stranger",
-
-        text:
-            "The missing citizens are alive. They're being stored outside normal time until someone decides whether this universe should continue to exist.",
-
-        choices: [
-
-            [
-                "Free them.",
-                "event",
-                ""
-            ],
-
-            [
-                "Ask who decides.",
-                "reason",
-                ""
-            ],
-
-            [
-                "Leave this dimension.",
-                "return",
-                ""
-            ]
-
-        ]
-
-    },
-
-
-    reason: {
-
-        speaker:
-            "THE ARCHIVIST",
-
-        location:
-            "THE WHITE ROOM",
-
-        character:
-            "stranger",
-
-        text:
-            "The Archivist steps closer. 'You have already changed six universes. This is the seventh.'",
-
-        choices: [
-
-            [
-                "Ask what you changed.",
-                "event",
-                ""
-            ],
-
-            [
-                "Ask how to undo it.",
-                "return",
-                ""
-            ],
-
-            [
-                "Keep exploring.",
-                "newDimension",
-                ""
-            ]
-
-        ]
-
-    }
-
-};
-
-
-/* ======================================================
-   GET CURRENT SCENE
-
-   Scenes are looked up only when needed.
-====================================================== */
-
-function getScene() {
-
-    if (
-        game.storyline ===
-        "The Silent City"
-    ) {
-
-        return silentScenes[
-            game.scene
-        ] || null;
-
-    }
-
-
-    return mainScenes[
-        game.scene
-    ] || null;
-
-}
-
-
-/* ======================================================
-   SAVE
-
-   Only save when something actually changes.
-====================================================== */
-
-let saveTimer = null;
-
-
-function saveGame() {
-
-    clearTimeout(saveTimer);
-
-
-    saveTimer =
-        setTimeout(() => {
-
-            try {
-
-                localStorage.setItem(
-                    "multiverseFracturedSave",
-                    JSON.stringify(game)
-                );
-
-            } catch (error) {
-
-                console.warn(
-                    "Save failed:",
-                    error
-                );
-
+            {
+                text:
+                    "Investigate.",
+
+                next:
+                    "memory"
+            },
+
+            {
+                text:
+                    "Find the Stranger.",
+
+                next:
+                    "stranger"
+            },
+
+            {
+                text:
+                    "Leave again.",
+
+                next:
+                    "newDimension"
             }
 
-        }, 150);
-
-}
-
-
-/* ======================================================
-   LOAD
-====================================================== */
-
-function loadGame() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                "multiverseFracturedSave"
-            );
-
-
-        if (!saved) {
-            return;
-        }
-
-
-        const loaded =
-            JSON.parse(saved);
-
-
-        if (
-            loaded &&
-            typeof loaded === "object"
-        ) {
-
-            game = loaded;
-
-        }
-
-    } catch (error) {
-
-        console.warn(
-            "Could not load save.",
-            error
-        );
-
-        game =
-            createDefaultGame();
+        ]
 
     }
 
+};
+
+
+/* -----------------------------------------------
+   GAME STATE
+------------------------------------------------ */
+
+let game = {
+
+    storyline:
+        "The Fractured Rebellion",
+
+    dimension:
+        "01-A",
+
+    scene:
+        "start",
+
+    history: [],
+
+    dimensions: [
+
+        {
+            id:
+                "01-A",
+
+            location:
+                "ABANDONED SUBWAY"
+        }
+
+    ]
+
+};
+
+
+/* -----------------------------------------------
+   GENERATED DIMENSION
+------------------------------------------------ */
+
+function createDimension() {
+
+    const letters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    const number =
+        Math.floor(
+            Math.random() * 99
+        ) + 1;
+
+    const letter =
+        letters[
+            Math.floor(
+                Math.random() *
+                letters.length
+            )
+        ];
+
+    const id =
+        String(number).padStart(2, "0")
+        +
+        "-"
+        +
+        letter;
+
+
+    const locations = [
+
+        "FROZEN CITY",
+
+        "RUINED CITY",
+
+        "UNDERGROUND LAB",
+
+        "DESERT FACILITY",
+
+        "SPACE STATION",
+
+        "OCEAN CITY",
+
+        "DEAD FOREST",
+
+        "MEGACITY",
+
+        "UNKNOWN COLONY"
+
+    ];
+
+
+    const location =
+        locations[
+            Math.floor(
+                Math.random() *
+                locations.length
+            )
+        ];
+
+
+    game.dimensions.push({
+
+        id:
+            id,
+
+        location:
+            location
+
+    });
+
+
+    game.dimension =
+        id;
+
+
+    game.scene =
+        "generated";
+
+
+    showEvent(
+        "ENTERED " + id
+    );
+
 }
 
 
-/* ======================================================
-   HISTORY
+/* -----------------------------------------------
+   GENERATED SCENE
+------------------------------------------------ */
 
-   Stores only the information needed to backtrack.
-   This is much smaller than copying the entire game.
-====================================================== */
+function getGeneratedScene() {
 
-function saveHistory() {
+    return {
+
+        speaker:
+            "SYSTEM",
+
+        location:
+            getCurrentLocation(),
+
+        text:
+            "You have entered a universe that has never seen you before. The rules of reality feel different here.",
+
+        choices: [
+
+            {
+                text:
+                    "Explore this universe.",
+
+                next:
+                    "generatedExplore"
+            },
+
+            {
+                text:
+                    "Find another version of yourself.",
+
+                next:
+                    "alternate"
+            },
+
+            {
+                text:
+                    "Search for a way back.",
+
+                next:
+                    "return"
+            },
+
+            {
+                text:
+                    "Look for signs of the multiverse event.",
+
+                next:
+                    "event"
+            }
+
+        ]
+
+    };
+
+}
+
+
+/* -----------------------------------------------
+   GENERATED EXPLORATION
+------------------------------------------------ */
+
+function getGeneratedExplore() {
+
+    return {
+
+        speaker:
+            "SYSTEM",
+
+        location:
+            getCurrentLocation(),
+
+        text:
+            "You explore the unfamiliar world. Something is watching you from somewhere nearby.",
+
+        choices: [
+
+            {
+                text:
+                    "Find whoever is watching.",
+
+                next:
+                    "alternate"
+            },
+
+            {
+                text:
+                    "Keep exploring.",
+
+                next:
+                    "generatedExplore2"
+            },
+
+            {
+                text:
+                    "Return.",
+
+                next:
+                    "return"
+            }
+
+        ]
+
+    };
+
+}
+
+
+/* -----------------------------------------------
+   SECOND GENERATED SCENE
+------------------------------------------------ */
+
+function getGeneratedExplore2() {
+
+    return {
+
+        speaker:
+            "UNKNOWN",
+
+        location:
+            getCurrentLocation(),
+
+        text:
+            "A voice speaks from behind you: 'Every dimension has a story. Yours keeps rewriting them.'",
+
+        choices: [
+
+            {
+                text:
+                    "Turn around.",
+
+                next:
+                    "alternate"
+            },
+
+            {
+                text:
+                    "Ask who they are.",
+
+                next:
+                    "event"
+            },
+
+            {
+                text:
+                    "Run.",
+
+                next:
+                    "newDimension"
+            },
+
+            {
+                text:
+                    "Go back.",
+
+                next:
+                    "return"
+            }
+
+        ]
+
+    };
+
+}
+
+
+/* -----------------------------------------------
+   CURRENT LOCATION
+------------------------------------------------ */
+
+function getCurrentLocation() {
+
+    const found =
+        game.dimensions.find(
+            dimension =>
+                dimension.id ===
+                game.dimension
+        );
+
+
+    if (found) {
+
+        return found.location;
+
+    }
+
+
+    return "UNKNOWN";
+}
+
+
+/* -----------------------------------------------
+   RENDER
+------------------------------------------------ */
+
+function render() {
+
+    let scene;
+
+
+    if (
+        game.scene ===
+        "generated"
+    ) {
+
+        scene =
+            getGeneratedScene();
+
+    }
+
+    else if (
+        game.scene ===
+        "generatedExplore"
+    ) {
+
+        scene =
+            getGeneratedExplore();
+
+    }
+
+    else if (
+        game.scene ===
+        "generatedExplore2"
+    ) {
+
+        scene =
+            getGeneratedExplore2();
+
+    }
+
+    else {
+
+        scene =
+            scenes[
+                game.scene
+            ];
+
+    }
+
+
+    if (!scene) {
+
+        console.error(
+            "Scene missing:",
+            game.scene
+        );
+
+        game.scene =
+            "start";
+
+        scene =
+            scenes.start;
+
+    }
+
+
+    storyElement.textContent =
+        game.storyline;
+
+
+    dimensionElement.textContent =
+        game.dimension;
+
+
+    speakerElement.textContent =
+        scene.speaker;
+
+
+    locationElement.textContent =
+        scene.location;
+
+
+    textElement.textContent =
+        scene.text;
+
+
+    choicesElement.innerHTML =
+        "";
+
+
+    scene.choices.forEach(
+        choice => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "choice";
+
+
+            button.textContent =
+                choice.text;
+
+
+            button.onclick =
+                function() {
+
+                    makeChoice(
+                        choice.next
+                    );
+
+                };
+
+
+            choicesElement.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* -----------------------------------------------
+   MAKE CHOICE
+------------------------------------------------ */
+
+function makeChoice(next) {
 
     game.history.push({
 
@@ -1988,44 +1569,48 @@ function saveHistory() {
             game.dimension,
 
         scene:
-            game.scene,
-
-        stability:
-            game.stability,
-
-        alex:
-            game.alex,
-
-        stranger:
-            game.stranger
+            game.scene
 
     });
 
 
     if (
-        game.history.length > 50
+        next ===
+        "newDimension"
     ) {
 
-        game.history.shift();
+        createDimension();
 
     }
+
+    else {
+
+        game.scene =
+            next;
+
+    }
+
+
+    save();
+
+    render();
 
 }
 
 
-/* ======================================================
+/* -----------------------------------------------
    BACKTRACK
-====================================================== */
+------------------------------------------------ */
 
 function backtrack() {
 
     if (
-        !game.history ||
-        game.history.length === 0
+        game.history.length ===
+        0
     ) {
 
         showEvent(
-            "NO PREVIOUS TIMELINE"
+            "NO PREVIOUS CHOICE"
         );
 
         return;
@@ -2049,19 +1634,7 @@ function backtrack() {
         previous.scene;
 
 
-    game.stability =
-        previous.stability;
-
-
-    game.alex =
-        previous.alex;
-
-
-    game.stranger =
-        previous.stranger;
-
-
-    saveGame();
+    save();
 
     render();
 
@@ -2072,196 +1645,11 @@ function backtrack() {
 }
 
 
-/* ======================================================
-   EFFECTS
-====================================================== */
-
-function applyEffect(effect) {
-
-    if (!effect) {
-        return;
-    }
-
-
-    const parts =
-        effect.split(":");
-
-
-    const type =
-        parts[0];
-
-
-    const amount =
-        Number(parts[1]);
-
-
-    if (
-        Number.isNaN(amount)
-    ) {
-        return;
-    }
-
-
-    if (
-        type === "stability"
-    ) {
-
-        game.stability =
-            clamp(
-                game.stability +
-                amount,
-                0,
-                100
-            );
-
-    }
-
-
-    if (
-        type === "alex"
-    ) {
-
-        game.alex =
-            clamp(
-                game.alex +
-                amount,
-                0,
-                100
-            );
-
-    }
-
-
-    if (
-        type === "stranger"
-    ) {
-
-        game.stranger =
-            clamp(
-                game.stranger +
-                amount,
-                0,
-                100
-            );
-
-    }
-
-}
-
-
-/* ======================================================
-   CHOICE
-====================================================== */
-
-function choose(choice) {
-
-    saveHistory();
-
-
-    applyEffect(
-        choice[2]
-    );
-
-
-    const next =
-        choice[1];
-
-
-    if (
-        next ===
-        "newDimension"
-    ) {
-
-        createNewDimension();
-
-    }
-
-    else if (
-        next ===
-        "return"
-    ) {
-
-        returnToDimension();
-
-    }
-
-    else if (
-        next ===
-        "event"
-    ) {
-
-        game.scene =
-            "event";
-
-
-        if (
-            game.storyline ===
-            "The Silent City"
-        ) {
-
-            /*
-                Silent City uses the main
-                multiverse event system here.
-            */
-
-        }
-
-    }
-
-    else {
-
-        game.scene =
-            next;
-
-    }
-
-
-    checkForMultiverseEvent();
-
-    saveGame();
-
-    render();
-
-}
-
-
-/* ======================================================
-   CLAMP
-====================================================== */
-
-function clamp(
-    value,
-    min,
-    max
-) {
-
-    return Math.max(
-        min,
-        Math.min(
-            max,
-            value
-        )
-    );
-
-}
-
-
-/* ======================================================
+/* -----------------------------------------------
    NEW STORYLINE
-====================================================== */
+------------------------------------------------ */
 
-function newStory() {
-
-    const confirmed =
-        confirm(
-            "Start a completely different timeline?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
+function newStoryline() {
 
     game = {
 
@@ -2272,16 +1660,9 @@ function newStory() {
             "73-Z",
 
         scene:
-            "start",
+            "silentStart",
 
-        stability:
-            100,
-
-        alex:
-            50,
-
-        stranger:
-            50,
+        history: [],
 
         dimensions: [
 
@@ -2290,1426 +1671,624 @@ function newStory() {
                     "73-Z",
 
                 location:
-                    "Silent City",
-
-                stability:
-                    100,
-
-                story:
-                    "silent"
+                    "EMPTY CITY"
             }
 
-        ],
-
-        history: [],
-
-        events: [],
-
-        visited:
-            {}
+        ]
 
     };
 
-
-    setBackground(
-        "silent"
-    );
-
-
-    saveGame();
-
-    render();
 
     showEvent(
         "NEW TIMELINE CREATED"
     );
 
-}
 
-
-/* ======================================================
-   HARD RESET
-====================================================== */
-
-function hardReset() {
-
-    const confirmed =
-        confirm(
-            "HARD RESET will erase your current save and return to Dimension 01-A. Continue?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    localStorage.removeItem(
-        "multiverseFracturedSave"
-    );
-
-
-    game =
-        createDefaultGame();
-
-
-    setBackground(
-        "main"
-    );
-
+    save();
 
     render();
 
-    showEvent(
-        "TIMELINE RESET"
-    );
-
 }
 
 
-/* ======================================================
-   CREATE DIMENSION
-====================================================== */
+/* -----------------------------------------------
+   SILENT CITY
+------------------------------------------------ */
 
-function createNewDimension() {
+scenes.silentStart = {
 
-    const letters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    speaker:
+        "SYSTEM",
 
+    location:
+        "EMPTY CITY",
 
-    let id;
+    text:
+        "You arrive in Dimension 73-Z. The city is completely empty. Cars are parked everywhere, lights are on, but there isn't a single person.",
 
+    choices: [
 
-    do {
+        {
+            text:
+                "Enter a building.",
 
-        const number =
-            Math.floor(
-                Math.random() * 99
-            ) + 1;
+            next:
+                "silentBuilding"
+        },
 
+        {
+            text:
+                "Go toward the city center.",
 
-        const letter =
-            letters[
-                Math.floor(
-                    Math.random() *
-                    letters.length
-                )
-            ];
+            next:
+                "silentCenter"
+        },
 
+        {
+            text:
+                "Search the cars.",
 
-        id =
-            String(number).padStart(
-                2,
-                "0"
-            )
-            +
-            "-"
-            +
-            letter;
+            next:
+                "silentCars"
+        },
 
-    }
+        {
+            text:
+                "Call out.",
 
-    while (
-        game.dimensions.some(
-            d =>
-                d.id === id
-        )
-    );
-
-
-    const locations = [
-
-        "RUINED DOWNTOWN",
-
-        "FROZEN CITY",
-
-        "UNDERGROUND LABORATORY",
-
-        "DESERT RESEARCH FACILITY",
-
-        "BROKEN SPACE STATION",
-
-        "UNKNOWN COLONY",
-
-        "DEAD FOREST",
-
-        "ABANDONED RESEARCH FACILITY",
-
-        "OCEAN CITY",
-
-        "MEGACITY",
-
-        "TIMELINE ZERO"
-
-    ];
-
-
-    const location =
-        locations[
-            Math.floor(
-                Math.random() *
-                locations.length
-            )
-        ];
-
-
-    const stability =
-        Math.floor(
-            50 +
-            Math.random() *
-            51
-        );
-
-
-    game.dimensions.push({
-
-        id:
-            id,
-
-        location:
-            location,
-
-        stability:
-            stability,
-
-        story:
-            "generated"
-
-    });
-
-
-    game.dimension =
-        id;
-
-
-    game.stability =
-        stability;
-
-
-    game.scene =
-        "generated";
-
-
-    /*
-        Generated scene is created only when
-        the player actually enters a new dimension.
-    */
-
-    showEvent(
-        "ENTERING " + id
-    );
-
-}
-
-
-/* ======================================================
-   GENERATED DIMENSION SCENES
-====================================================== */
-
-function getGeneratedScene() {
-
-    const dimension =
-        game.dimensions.find(
-            d =>
-                d.id ===
-                game.dimension
-        );
-
-
-    const location =
-        dimension
-            ? dimension.location
-            : "UNKNOWN LOCATION";
-
-
-    return {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            location,
-
-        character:
-            "",
-
-        text:
-            "Reality shifts around you. You have entered Dimension " +
-            game.dimension +
-            ". This universe has never seen you before.",
-
-        choices: [
-
-            [
-                "Explore this universe.",
-                "generatedExplore",
-                ""
-            ],
-
-            [
-                "Search for another version of yourself.",
-                "alternate",
-                ""
-            ],
-
-            [
-                "Search for a way back.",
-                "return",
-                ""
-            ],
-
-            [
-                "Look for signs of the multiverse event.",
-                "event",
-                ""
-            ]
-
-        ]
-
-    };
-
-}
-
-
-/* ======================================================
-   GENERATED EXPLORATION
-====================================================== */
-
-function getGeneratedExploreScene() {
-
-    const locations = [
-
-        "A city where nobody sleeps.",
-
-        "A colony orbiting a dead planet.",
-
-        "A world where the sky is permanently red.",
-
-        "A city frozen in time.",
-
-        "A civilization hidden underground.",
-
-        "A world where every building is identical."
-
-    ];
-
-
-    const text =
-        locations[
-            hashDimension(
-                game.dimension
-            ) %
-            locations.length
-        ];
-
-
-    return {
-
-        speaker:
-            "SYSTEM",
-
-        location:
-            "UNKNOWN TERRITORY",
-
-        character:
-            "alex",
-
-        text:
-            text +
-            " Something feels wrong. The people here act as if they already know who you are.",
-
-        choices: [
-
-            [
-                "Find someone and ask questions.",
-                "silentEntity",
-                ""
-            ],
-
-            [
-                "Keep exploring.",
-                "generatedExplore2",
-                ""
-            ],
-
-            [
-                "Return to the previous dimension.",
-                "return",
-                ""
-            ]
-
-        ]
-
-    };
-
-}
-
-
-/* ======================================================
-   SECOND GENERATED SCENE
-====================================================== */
-
-function getGeneratedExplore2Scene() {
-
-    return {
-
-        speaker:
-            "UNKNOWN",
-
-        location:
-            "UNKNOWN TERRITORY",
-
-        character:
-            "stranger",
-
-        text:
-            "You hear a voice behind you. 'Every dimension has a story. The problem is that yours keeps rewriting them.'",
-
-        choices: [
-
-            [
-                "Turn around.",
-                "alternate",
-                ""
-            ],
-
-            [
-                "Ask who they are.",
-                "silentEntity",
-                ""
-            ],
-
-            [
-                "Run.",
-                "newDimension",
-                ""
-            ],
-
-            [
-                "Return.",
-                "return",
-                ""
-            ]
-
-        ]
-
-    };
-
-}
-
-
-/* ======================================================
-   GET CURRENT SCENE — WITH GENERATED SUPPORT
-====================================================== */
-
-function getCurrentScene() {
-
-    if (
-        game.storyline ===
-        "The Silent City"
-    ) {
-
-        if (
-            game.scene ===
-            "event" ||
-            game.scene ===
-            "newDimension" ||
-            game.scene ===
-            "return" ||
-            game.scene ===
-            "alternate"
-        ) {
-
-            return getSharedScene(
-                game.scene
-            );
-
+            next:
+                "silentCall"
         }
 
+    ]
 
-        return silentScenes[
-            game.scene
-        ];
+};
+
+
+scenes.silentBuilding = {
+
+    speaker:
+        "ALEX",
+
+    location:
+        "EMPTY APARTMENT",
+
+    text:
+        "Dinner is still sitting on a table. A television is playing a news report, but the reporter is staring directly at you.",
+
+    choices: [
+
+        {
+            text:
+                "Watch the report.",
+
+            next:
+                "silentReport"
+        },
+
+        {
+            text:
+                "Turn off the television.",
+
+            next:
+                "silentPower"
+        },
+
+        {
+            text:
+                "Search the apartment.",
+
+            next:
+                "silentNote"
+        }
+
+    ]
+
+};
+
+
+scenes.silentReport = {
+
+    speaker:
+        "TELEVISION",
+
+    location:
+        "EMPTY APARTMENT",
+
+    text:
+        "The reporter finally speaks: 'If you're seeing this message, you're not from this dimension.'",
+
+    choices: [
+
+        {
+            text:
+                "Keep watching.",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Turn it off.",
+
+            next:
+                "silentPower"
+        }
+
+    ]
+
+};
+
+
+scenes.silentPower = {
+
+    speaker:
+        "SYSTEM",
+
+    location:
+        "EMPTY APARTMENT",
+
+    text:
+        "The television explodes into static. For half a second, you see hundreds of people standing inside a white room.",
+
+    choices: [
+
+        {
+            text:
+                "Follow the signal.",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Leave.",
+
+            next:
+                "silentCenter"
+        }
+
+    ]
+
+};
+
+
+scenes.silentNote = {
+
+    speaker:
+        "ALEX",
+
+    location:
+        "EMPTY APARTMENT",
+
+    text:
+        "Under the table you find a note: DON'T TRUST THE PERSON WHO LOOKS LIKE YOU.",
+
+    choices: [
+
+        {
+            text:
+                "Keep the note.",
+
+            next:
+                "silentCenter"
+        },
+
+        {
+            text:
+                "Search for whoever wrote it.",
+
+            next:
+                "silentEntity"
+        }
+
+    ]
+
+};
+
+
+scenes.silentCenter = {
+
+    speaker:
+        "ALEX",
+
+    location:
+        "CITY CENTER",
+
+    text:
+        "Every traffic light turns green. Then thousands of empty cars begin moving through the streets by themselves.",
+
+    choices: [
+
+        {
+            text:
+                "Follow the cars.",
+
+            next:
+                "silentCars"
+        },
+
+        {
+            text:
+                "Run into the subway.",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Stay in the street.",
+
+            next:
+                "silentEntity"
+        }
+
+    ]
+
+};
+
+
+scenes.silentCars = {
+
+    speaker:
+        "SYSTEM",
+
+    location:
+        "CITY STREET",
+
+    text:
+        "A radio turns on inside one of the cars. A voice whispers: 'Dimension 73-Z is no longer considered inhabited.'",
+
+    choices: [
+
+        {
+            text:
+                "Ask who is speaking.",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Trace the signal.",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Leave.",
+
+            next:
+                "silentCenter"
+        }
+
+    ]
+
+};
+
+
+scenes.silentCall = {
+
+    speaker:
+        "ALEX",
+
+    location:
+        "EMPTY CITY",
+
+    text:
+        "You call out. Someone answers from directly behind you.",
+
+    choices: [
+
+        {
+            text:
+                "Turn around.",
+
+            next:
+                "silentOtherAlex"
+        },
+
+        {
+            text:
+                "Run.",
+
+            next:
+                "silentCenter"
+        }
+
+    ]
+
+};
+
+
+scenes.silentOtherAlex = {
+
+    speaker:
+        "OTHER ALEX",
+
+    location:
+        "EMPTY CITY",
+
+    text:
+        "You turn around and see yourself. The other you says: 'You shouldn't have come here.'",
+
+    choices: [
+
+        {
+            text:
+                "What happened?",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Why do you look like me?",
+
+            next:
+                "silentEntity"
+        },
+
+        {
+            text:
+                "Trust them.",
+
+            next:
+                "silentEntity"
+        }
+
+    ]
+
+};
+
+
+scenes.silentEntity = {
+
+    speaker:
+        "THE ARCHIVIST",
+
+    location:
+        "THE WHITE ROOM",
+
+    text:
+        "A figure appears. 'Every universe eventually asks the same question: who created the multiverse?'",
+
+    choices: [
+
+        {
+            text:
+                "Who created it?",
+
+            next:
+                "silentTruth"
+        },
+
+        {
+            text:
+                "Where did everyone go?",
+
+            next:
+                "silentPeople"
+        },
+
+        {
+            text:
+                "Why was I brought here?",
+
+            next:
+                "silentReason"
+        },
+
+        {
+            text:
+                "Leave this universe.",
+
+            next:
+                "newDimension"
+        }
+
+    ]
+
+};
+
+
+scenes.silentTruth = {
+
+    speaker:
+        "THE ARCHIVIST",
+
+    location:
+        "THE WHITE ROOM",
+
+    text:
+        "The Archivist looks directly at you. 'You.'",
+
+    choices: [
+
+        {
+            text:
+                "That's impossible.",
+
+            next:
+                "silentReason"
+        },
+
+        {
+            text:
+                "Which version of me?",
+
+            next:
+                "silentReason"
+        },
+
+        {
+            text:
+                "Show me the original.",
+
+            next:
+                "newDimension"
+        }
+
+    ]
+
+};
+
+
+scenes.silentPeople = {
+
+    speaker:
+        "THE ARCHIVIST",
+
+    location:
+        "THE WHITE ROOM",
+
+    text:
+        "The missing citizens are alive. They're being stored outside normal time until someone decides whether this universe should continue.",
+
+    choices: [
+
+        {
+            text:
+                "Free them.",
+
+            next:
+                "event"
+        },
+
+        {
+            text:
+                "Who decides?",
+
+            next:
+                "silentReason"
+        },
+
+        {
+            text:
+                "Leave.",
+
+            next:
+                "newDimension"
+        }
+
+    ]
+
+};
+
+
+scenes.silentReason = {
+
+    speaker:
+        "THE ARCHIVIST",
+
+    location:
+        "THE WHITE ROOM",
+
+    text:
+        "The Archivist steps closer. 'You have already changed six universes. This is the seventh.'",
+
+    choices: [
+
+        {
+            text:
+                "What did I change?",
+
+            next:
+                "event"
+        },
+
+        {
+            text:
+                "How do I undo it?",
+
+            next:
+                "return"
+        },
+
+        {
+            text:
+                "Keep exploring.",
+
+            next:
+                "newDimension"
+        }
+
+    ]
+
+};
+
+
+/* -----------------------------------------------
+   SAVE
+------------------------------------------------ */
+
+function save() {
+
+    try {
+
+        localStorage.setItem(
+            "multiverseSave",
+            JSON.stringify(game)
+        );
 
     }
 
+    catch (error) {
 
-    if (
-        game.scene ===
-        "generated"
-    ) {
-
-        return getGeneratedScene();
+        console.log(
+            "Save unavailable."
+        );
 
     }
-
-
-    if (
-        game.scene ===
-        "generatedExplore"
-    ) {
-
-        return getGeneratedExploreScene();
-
-    }
-
-
-    if (
-        game.scene ===
-        "generatedExplore2"
-    ) {
-
-        return getGeneratedExplore2Scene();
-
-    }
-
-
-    return mainScenes[
-        game.scene
-    ];
 
 }
 
 
-/* ======================================================
-   SHARED SCENES
-====================================================== */
+/* -----------------------------------------------
+   LOAD
+------------------------------------------------ */
 
-function getSharedScene(sceneName) {
+function load() {
 
-    if (
-        sceneName ===
-        "newDimension"
-    ) {
+    try {
 
-        createNewDimension();
+        const saved =
+            localStorage.getItem(
+                "multiverseSave"
+            );
 
-        return getGeneratedScene();
 
-    }
+        if (saved) {
 
+            const loaded =
+                JSON.parse(saved);
 
-    if (
-        sceneName ===
-        "return"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "PREVIOUS DIMENSION",
-
-            character:
-                "",
-
-            text:
-                "The dimensional doorway opens. The previous reality is waiting on the other side.",
-
-            choices: [
-
-                [
-                    "Go back.",
-                    "returnNow",
-                    ""
-                ],
-
-                [
-                    "Stay here.",
-                    "generatedExplore",
-                    ""
-                ],
-
-                [
-                    "Open another universe.",
-                    "newDimension",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "alternate"
-    ) {
-
-        return {
-
-            speaker:
-                "OTHER YOU",
-
-            location:
-                "UNKNOWN DIMENSION",
-
-            character:
-                "stranger",
-
-            text:
-                "Another version of you is standing across the street. They already know what choice you're going to make.",
-
-            choices: [
-
-                [
-                    "Ask what happens next.",
-                    "event",
-                    ""
-                ],
-
-                [
-                    "Ask how to escape.",
-                    "return",
-                    ""
-                ],
-
-                [
-                    "Follow them.",
-                    "generatedExplore",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "event"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "MULTIVERSE",
-
-            character:
-                "",
-
-            text:
-                "⚠ A MULTIVERSE EVENT IS IN PROGRESS. Hundreds of timelines are changing simultaneously.",
-
-            choices: [
-
-                [
-                    "Investigate the event.",
-                    "eventAfter",
-                    ""
-                ],
-
-                [
-                    "Enter another universe.",
-                    "newDimension",
-                    ""
-                ],
-
-                [
-                    "Try to stop it.",
-                    "eventControl",
-                    "stability:-10"
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "eventAfter"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "MULTIVERSE",
-
-            character:
-                "",
-
-            text:
-                "Your device identifies the source. One unknown dimension is sending waves through nearly every timeline.",
-
-            choices: [
-
-                [
-                    "Go to the source.",
-                    "newDimension",
-                    ""
-                ],
-
-                [
-                    "Try to stabilize your universe.",
-                    "stable",
-                    "stability:15"
-                ],
-
-                [
-                    "Do nothing.",
-                    "return",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "eventControl"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "DIMENSIONAL CORE",
-
-            character:
-                "",
-
-            text:
-                "You connect directly to the multiverse. Millions of timelines appear in your mind at once.",
-
-            choices: [
-
-                [
-                    "Push the event away.",
-                    "success",
-                    "stability:20"
-                ],
-
-                [
-                    "Redirect it.",
-                    "success",
-                    "stability:10"
-                ],
-
-                [
-                    "Absorb it.",
-                    "failure",
-                    "stability:-30"
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "success"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "MULTIVERSE",
-
-            character:
-                "",
-
-            text:
-                "The fracture begins to close. Thousands of universes stabilize. Then something notices you.",
-
-            choices: [
-
-                [
-                    "Find what noticed you.",
-                    "alternate",
-                    ""
-                ],
-
-                [
-                    "Return.",
-                    "return",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "failure"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "COLLAPSING REALITY",
-
-            character:
-                "",
-
-            text:
-                "The device overloads. Your universe begins collapsing.",
-
-            choices: [
-
-                [
-                    "Escape.",
-                    "newDimension",
-                    ""
-                ],
-
-                [
-                    "Try again.",
-                    "eventControl",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "stable"
-    ) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            location:
-                "DIMENSIONAL CORE",
-
-            character:
-                "alex",
-
-            text:
-                "Reality stabilizes. But the multiverse event has left a permanent scar across the timeline.",
-
-            choices: [
-
-                [
-                    "Investigate the scar.",
-                    "alternate",
-                    ""
-                ],
-
-                [
-                    "Travel elsewhere.",
-                    "newDimension",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    if (
-        sceneName ===
-        "returnNow"
-    ) {
-
-        game.scene =
-            "intro";
-
-        return mainScenes.intro;
-
-    }
-
-
-    if (
-        sceneName ===
-        "silentEntity"
-    ) {
-
-        return {
-
-            speaker:
-                "THE ARCHIVIST",
-
-            location:
-                "THE WHITE ROOM",
-
-            character:
-                "stranger",
-
-            text:
-                "The Archivist appears. 'You have crossed too many timelines. Something has begun following you.'",
-
-            choices: [
-
-                [
-                    "Ask what is following me.",
-                    "event",
-                    ""
-                ],
-
-                [
-                    "Ask who created the multiverse.",
-                    "truth",
-                    ""
-                ],
-
-                [
-                    "Run.",
-                    "newDimension",
-                    ""
-                ]
-
-            ]
-
-        };
-
-    }
-
-
-    return mainScenes.intro;
-
-}
-
-
-/* ======================================================
-   DIMENSION HASH
-
-   Gives generated dimensions consistent text without
-   using random numbers every render.
-====================================================== */
-
-function hashDimension(id) {
-
-    let hash =
-        0;
-
-
-    for (
-        let i = 0;
-        i < id.length;
-        i++
-    ) {
-
-        hash =
-            (
-                hash * 31 +
-                id.charCodeAt(i)
-            )
-            >>> 0;
-
-    }
-
-
-    return hash;
-
-}
-
-
-/* ======================================================
-   RETURN TO DIMENSION
-====================================================== */
-
-function returnToDimension() {
-
-    if (
-        game.storyline ===
-        "The Silent City"
-    ) {
-
-        game.dimension =
-            "73-Z";
-
-        game.scene =
-            "start";
-
-        game.stability =
-            100;
-
-        return;
-
-    }
-
-
-    game.dimension =
-        "01-A";
-
-
-    game.scene =
-        "intro";
-
-
-    game.stability =
-        100;
-
-}
-
-
-/* ======================================================
-   MULTIVERSE EVENTS
-====================================================== */
-
-function checkForMultiverseEvent() {
-
-    /*
-        Events only happen occasionally.
-
-        This prevents an event from appearing after
-        every single choice.
-    */
-
-    if (
-        Math.random() >
-        0.08
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        game.dimensions.length <
-        2
-    ) {
-
-        return;
-
-    }
-
-
-    const names = [
-
-        "THE FRACTURE",
-
-        "THE CONVERGENCE",
-
-        "THE PARADOX",
-
-        "THE TIMELINE WAR",
-
-        "THE GREAT COLLAPSE",
-
-        "THE INVERSION",
-
-        "THE VOID"
-
-    ];
-
-
-    const name =
-        names[
-            Math.floor(
-                Math.random() *
-                names.length
-            )
-        ];
-
-
-    let affected =
-        0;
-
-
-    game.dimensions.forEach(
-        dimension => {
 
             if (
-                Math.random() <
-                0.75
+                loaded &&
+                loaded.scene
             ) {
 
-                dimension.stability =
-                    clamp(
-                        dimension.stability -
-                        Math.floor(
-                            Math.random() *
-                            20
-                        ),
-                        0,
-                        100
-                    );
-
-
-                affected++;
+                game =
+                    loaded;
 
             }
 
         }
-    );
-
-
-    game.events.push({
-
-        name:
-            name,
-
-        affected:
-            affected,
-
-        time:
-            Date.now()
-
-    });
-
-
-    saveGame();
-
-
-    showEvent(
-        name +
-        " — " +
-        affected +
-        " DIMENSIONS AFFECTED"
-    );
-
-}
-
-
-/* ======================================================
-   EVENT POPUP
-====================================================== */
-
-let eventTimer = null;
-
-
-function showEvent(name) {
-
-    UI.eventName.textContent =
-        name;
-
-
-    UI.event.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        eventTimer
-    );
-
-
-    eventTimer =
-        setTimeout(
-            () => {
-
-                UI.event.classList.remove(
-                    "show"
-                );
-
-            },
-            4000
-        );
-
-}
-
-
-/* ======================================================
-   BACKGROUND
-
-   Only changes when entering a new type of world.
-   It does NOT change every time the dialogue renders.
-====================================================== */
-
-function setBackground(type) {
-
-    if (
-        type ===
-        "silent"
-    ) {
-
-        UI.background.style.background =
-            `
-            radial-gradient(
-                circle at 50% 35%,
-                #27323b 0%,
-                #111820 48%,
-                #020406 100%
-            )
-            `;
-
-        return;
 
     }
 
+    catch (error) {
 
-    if (
-        type ===
-        "generated"
-    ) {
-
-        const hue =
-            hashDimension(
-                game.dimension
-            ) %
-            360;
-
-
-        UI.background.style.background =
-            `
-            radial-gradient(
-                circle at 50% 40%,
-                hsl(${hue}, 28%, 27%) 0%,
-                #151522 48%,
-                #030308 100%
-            )
-            `;
-
-        return;
-
-    }
-
-
-    UI.background.style.background =
-        `
-        radial-gradient(
-            circle at 50% 40%,
-            #30304a 0%,
-            #151522 45%,
-            #030308 100%
-        )
-        `;
-
-}
-
-
-/* ======================================================
-   RENDER
-
-   One render updates the existing elements instead of
-   rebuilding the entire page.
-====================================================== */
-
-function render() {
-
-    let scene =
-        getCurrentScene();
-
-
-    /*
-        Generated scene fallback.
-    */
-
-    if (!scene) {
-
-        console.warn(
-            "Missing scene:",
-            game.scene
-        );
-
-
-        game.scene =
-            "intro";
-
-
-        game.storyline =
-            "The Fractured Rebellion";
-
-
-        scene =
-            mainScenes.intro;
-
-    }
-
-
-    UI.story.textContent =
-        game.storyline;
-
-
-    UI.dimension.textContent =
-        game.dimension;
-
-
-    UI.location.textContent =
-        scene.location;
-
-
-    UI.speaker.textContent =
-        scene.speaker;
-
-
-    UI.text.textContent =
-        scene.text;
-
-
-    /*
-        Characters
-    */
-
-    UI.alex.classList.remove(
-        "show"
-    );
-
-
-    UI.stranger.classList.remove(
-        "show"
-    );
-
-
-    if (
-        scene.character ===
-        "alex"
-    ) {
-
-        UI.alex.classList.add(
-            "show"
-        );
-
-    }
-
-
-    if (
-        scene.character ===
-        "stranger"
-    ) {
-
-        UI.stranger.classList.add(
-            "show"
-        );
-
-    }
-
-
-    /*
-        Choices
-
-        We use a DocumentFragment so the browser only
-        updates the screen once.
-    */
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    scene.choices.forEach(
-        choice => {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "choice";
-
-
-            button.textContent =
-                choice[0];
-
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    choose(
-                        choice
-                    );
-
-                },
-                {
-                    once:
-                        true
-                }
-            );
-
-
-            fragment.appendChild(
-                button
-            );
-
-        }
-    );
-
-
-    UI.choices.replaceChildren(
-        fragment
-    );
-
-
-    /*
-        Status
-    */
-
-    UI.stability.style.width =
-        game.stability +
-        "%";
-
-
-    UI.alexBar.style.width =
-        game.alex +
-        "%";
-
-
-    UI.strangerBar.style.width =
-        game.stranger +
-        "%";
-
-
-    /*
-        Background only changes when appropriate.
-    */
-
-    if (
-        game.storyline ===
-        "The Silent City"
-    ) {
-
-        setBackground(
-            "silent"
-        );
-
-    }
-
-    else if (
-        game.scene ===
-        "generated" ||
-        game.scene ===
-        "generatedExplore" ||
-        game.scene ===
-        "generatedExplore2"
-    ) {
-
-        setBackground(
-            "generated"
-        );
-
-    }
-
-    else {
-
-        setBackground(
-            "main"
+        console.log(
+            "Starting new game."
         );
 
     }
@@ -3717,21 +2296,14 @@ function render() {
 }
 
 
-/* ======================================================
-   DIMENSION MAP
-====================================================== */
+/* -----------------------------------------------
+   MAP
+------------------------------------------------ */
 
 function openMap() {
 
-    UI.windowTitle.textContent =
-        "DIMENSION MAP";
-
-
-    UI.windowContent.replaceChildren();
-
-
-    const fragment =
-        document.createDocumentFragment();
+    dimensionList.innerHTML =
+        "";
 
 
     game.dimensions.forEach(
@@ -3744,43 +2316,67 @@ function openMap() {
 
 
             card.className =
-                "card";
+                "dimensionCard";
 
 
-            card.innerHTML = `
-
-                <strong>
-                    DIMENSION ${dimension.id}
-                </strong>
-
-                <br>
-
-                Location:
-                ${escapeHTML(
-                    dimension.location
-                )}
-
-                <br>
-
-                Stability:
-                ${dimension.stability}%
-
-            `;
+            card.textContent =
+                "Dimension " +
+                dimension.id +
+                " — " +
+                dimension.location;
 
 
-            card.addEventListener(
-                "click",
-                () => {
+            card.onclick =
+                function() {
 
-                    travelToDimension(
-                        dimension.id
-                    );
-
-                }
-            );
+                    game.dimension =
+                        dimension.id;
 
 
-            fragment.appendChild(
+                    if (
+                        dimension.id ===
+                        "01-A"
+                    ) {
+
+                        game.storyline =
+                            "The Fractured Rebellion";
+
+                        game.scene =
+                            "start";
+
+                    }
+
+                    else if (
+                        dimension.id ===
+                        "73-Z"
+                    ) {
+
+                        game.storyline =
+                            "The Silent City";
+
+                        game.scene =
+                            "silentStart";
+
+                    }
+
+                    else {
+
+                        game.scene =
+                            "generated";
+
+                    }
+
+
+                    closeMap();
+
+                    save();
+
+                    render();
+
+                };
+
+
+            dimensionList.appendChild(
                 card
             );
 
@@ -3788,210 +2384,156 @@ function openMap() {
     );
 
 
-    UI.windowContent.appendChild(
-        fragment
-    );
-
-
-    UI.window.classList.add(
+    mapElement.classList.add(
         "open"
     );
 
 }
 
 
-/* ======================================================
-   TRAVEL TO DIMENSION
-====================================================== */
+/* -----------------------------------------------
+   CLOSE MAP
+------------------------------------------------ */
 
-function travelToDimension(id) {
+function closeMap() {
 
-    const dimension =
-        game.dimensions.find(
-            d =>
-                d.id === id
-        );
-
-
-    if (!dimension) {
-        return;
-    }
-
-
-    saveHistory();
-
-
-    game.dimension =
-        id;
-
-
-    game.stability =
-        dimension.stability;
-
-
-    if (
-        dimension.story ===
-        "silent"
-    ) {
-
-        game.storyline =
-            "The Silent City";
-
-        game.scene =
-            "start";
-
-    }
-
-    else if (
-        dimension.story ===
-        "main"
-    ) {
-
-        game.storyline =
-            "The Fractured Rebellion";
-
-        game.scene =
-            "intro";
-
-    }
-
-    else {
-
-        game.storyline =
-            "The Fractured Rebellion";
-
-        game.scene =
-            "generated";
-
-    }
-
-
-    saveGame();
-
-    closeWindow();
-
-    render();
-
-
-    showEvent(
-        "TRAVELED TO " +
-        id
-    );
-
-}
-
-
-/* ======================================================
-   CLOSE WINDOW
-====================================================== */
-
-function closeWindow() {
-
-    UI.window.classList.remove(
+    mapElement.classList.remove(
         "open"
     );
 
 }
 
 
-/* ======================================================
-   HTML ESCAPE
-====================================================== */
+/* -----------------------------------------------
+   EVENT
+------------------------------------------------ */
 
-function escapeHTML(value) {
+let eventTimer;
 
-    return String(value)
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
+function showEvent(message) {
 
-        .replace(
-            /</g,
-            "&lt;"
-        )
+    eventElement.textContent =
+        message;
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+    eventElement.classList.add(
+        "show"
+    );
 
-        .replace(
-            /'/g,
-            "&#039;"
+
+    clearTimeout(
+        eventTimer
+    );
+
+
+    eventTimer =
+        setTimeout(
+            function() {
+
+                eventElement.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
         );
 
 }
 
 
-/* ======================================================
+/* -----------------------------------------------
    BUTTONS
-====================================================== */
+------------------------------------------------ */
 
-UI.backtrack.addEventListener(
-    "click",
-    backtrack
-);
-
-
-UI.map.addEventListener(
-    "click",
-    openMap
-);
+document
+    .getElementById("backtrack")
+    .onclick =
+    backtrack;
 
 
-UI.newStory.addEventListener(
-    "click",
-    newStory
-);
+document
+    .getElementById("newStory")
+    .onclick =
+    newStoryline;
 
 
-UI.reset.addEventListener(
-    "click",
-    hardReset
-);
+document
+    .getElementById("mapButton")
+    .onclick =
+    openMap;
 
 
-UI.closeWindow.addEventListener(
-    "click",
-    closeWindow
-);
+document
+    .getElementById("closeMap")
+    .onclick =
+    closeMap;
 
 
-/*
-    Clicking outside the map closes it.
-*/
-
-UI.window.addEventListener(
-    "click",
-    event => {
+document
+    .getElementById("reset")
+    .onclick =
+    function() {
 
         if (
-            event.target ===
-            UI.window
+            confirm(
+                "Erase your current timeline?"
+            )
         ) {
 
-            closeWindow();
+            localStorage.removeItem(
+                "multiverseSave"
+            );
+
+
+            game = {
+
+                storyline:
+                    "The Fractured Rebellion",
+
+                dimension:
+                    "01-A",
+
+                scene:
+                    "start",
+
+                history: [],
+
+                dimensions: [
+
+                    {
+                        id:
+                            "01-A",
+
+                        location:
+                            "ABANDONED SUBWAY"
+                    }
+
+                ]
+
+            };
+
+
+            render();
+
+            showEvent(
+                "TIMELINE RESET"
+            );
 
         }
 
-    }
-);
+    };
 
 
-/* ======================================================
-   STARTUP
+/* -----------------------------------------------
+   START GAME
+------------------------------------------------ */
 
-   This happens immediately. There are no images,
-   external libraries, fonts, or network requests.
-====================================================== */
-
-loadGame();
+load();
 
 render();
+
+console.log(
+    "MULTIVERSE GAME LOADED SUCCESSFULLY"
+);
+```
