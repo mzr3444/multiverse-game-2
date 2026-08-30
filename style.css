@@ -2,18 +2,26 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
     background: #050509;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 button {
-    font-family: inherit;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #app {
+    width: 100%;
     max-width: 1000px;
     margin: auto;
     padding: 25px;
@@ -32,19 +40,20 @@ header {
 h1 {
     margin: 0;
     color: #c477ff;
-    font-size: 24px;
+    font-size: 25px;
     letter-spacing: 4px;
 }
 
 header p {
+    margin-top: 8px;
     color: #666;
     font-size: 10px;
     letter-spacing: 3px;
 }
 
 #dimension {
-    color: #a865d4;
-    font-size: 13px;
+    color: #ad70d7;
+    font-size: 12px;
     text-align: right;
 }
 
@@ -52,51 +61,28 @@ header p {
 /* SCENE */
 
 .scene {
-    height: 330px;
-    margin: 25px 0 15px;
-
     position: relative;
+    height: 330px;
+    margin-top: 25px;
     overflow: hidden;
 
-    border: 1px solid #352a3e;
-    border-radius: 8px;
-
-    background: #090914;
-}
-
-.visual {
-    position: absolute;
-    inset: 0;
-
     background:
-        radial-gradient(
-            circle at 75% 30%,
-            #eeeeee 0 3%,
-            transparent 3.5%
-        ),
-
-        radial-gradient(
-            circle at 75% 30%,
-            #42295a 0 12%,
-            transparent 13%
-        ),
-
         linear-gradient(
-            #080419,
-            #110b19 60%,
+            #080516,
+            #120b20 60%,
             #050509
         );
+
+    border: 1px solid #392d43;
+    border-radius: 8px;
 }
 
-.visual::before {
 
-    content: "";
+/* STARS */
 
+.stars {
     position: absolute;
-
     inset: 0;
-
-    opacity: .35;
 
     background-image:
         radial-gradient(
@@ -105,10 +91,51 @@ header p {
         );
 
     background-size: 55px 55px;
+
+    opacity: .45;
 }
 
-.visual::after {
 
+/* MOON */
+
+.moon {
+    position: absolute;
+
+    width: 75px;
+    height: 75px;
+
+    right: 15%;
+    top: 15%;
+
+    border-radius: 50%;
+
+    background: #eee;
+
+    box-shadow:
+        0 0 35px #8069a0;
+}
+
+
+/* CITY */
+
+.city {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 100px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #08080d 0 35px,
+            #18111f 35px 55px
+        );
+}
+
+.city::after {
     content: "";
 
     position: absolute;
@@ -117,27 +144,28 @@ header p {
     right: 0;
     bottom: 0;
 
-    height: 80px;
+    height: 30px;
 
     background:
         repeating-linear-gradient(
             90deg,
-            #111 0 35px,
-            #1c1025 35px 65px
+            #28202e 0 4px,
+            transparent 4px 35px
         );
 }
 
-#location {
 
+/* LOCATION */
+
+#location {
     position: absolute;
 
-    bottom: 18px;
     left: 20px;
+    bottom: 20px;
 
-    z-index: 2;
+    z-index: 5;
 
     font-size: 11px;
-
     letter-spacing: 3px;
 
     color: #ddd;
@@ -147,32 +175,28 @@ header p {
 /* STORY */
 
 .story {
-
-    padding: 23px;
+    margin-top: 15px;
+    padding: 25px;
 
     background: #0c0a10;
 
     border: 1px solid #302936;
-
     border-radius: 8px;
 }
 
 #speaker {
-
     color: #c477ff;
 
     font-size: 12px;
-
     font-weight: bold;
 
     letter-spacing: 3px;
 
-    margin-bottom: 14px;
+    margin-bottom: 15px;
 }
 
 #text {
-
-    min-height: 90px;
+    min-height: 100px;
 
     color: #eee;
 
@@ -185,7 +209,6 @@ header p {
 /* CHOICES */
 
 #choices {
-
     display: grid;
 
     grid-template-columns: 1fr 1fr;
@@ -196,7 +219,6 @@ header p {
 }
 
 .choice {
-
     min-height: 65px;
 
     padding: 14px;
@@ -208,28 +230,20 @@ header p {
     background: #111018;
 
     border: 1px solid #39303f;
-
     border-radius: 5px;
 
     cursor: pointer;
-
-    transition: .15s;
 }
 
 .choice:hover {
-
     background: #1b1222;
-
     border-color: #b466e5;
-
-    transform: translateY(-2px);
 }
 
 
-/* BUTTONS */
+/* NAV BUTTONS */
 
-nav {
-
+.buttons {
     display: flex;
 
     flex-wrap: wrap;
@@ -239,23 +253,20 @@ nav {
     margin-top: 15px;
 }
 
-nav button {
-
-    padding: 11px 15px;
+.buttons button {
+    padding: 12px 16px;
 
     color: #aaa;
 
     background: #0b0a0e;
 
     border: 1px solid #302a36;
-
     border-radius: 5px;
 
     cursor: pointer;
 }
 
-nav button:hover {
-
+.buttons button:hover {
     color: white;
 
     border-color: #a960d5;
@@ -267,6 +278,7 @@ nav button:hover {
 /* MAP */
 
 #mapScreen {
+    display: none;
 
     position: fixed;
 
@@ -274,30 +286,26 @@ nav button:hover {
 
     z-index: 100;
 
-    display: flex;
-
-    justify-content: center;
-
     align-items: center;
+    justify-content: center;
 
     padding: 20px;
 
-    background: rgba(0,0,0,.9);
+    background: rgba(0, 0, 0, .9);
 }
 
-.hidden {
-    display: none !important;
+#mapScreen.open {
+    display: flex;
 }
 
-.mapBox {
+.mapWindow {
+    position: relative;
 
     width: min(800px, 100%);
 
     max-height: 90vh;
 
     overflow-y: auto;
-
-    position: relative;
 
     padding: 25px;
 
@@ -308,16 +316,25 @@ nav button:hover {
     border-radius: 8px;
 }
 
-#closeMap {
+.mapWindow h2 {
+    margin-top: 0;
 
+    letter-spacing: 4px;
+}
+
+.mapWindow p {
+    color: #777;
+}
+
+#closeMap {
     position: absolute;
 
     right: 12px;
     top: 8px;
 
-    border: none;
-
     background: none;
+
+    border: none;
 
     color: #aaa;
 
@@ -326,22 +343,7 @@ nav button:hover {
     cursor: pointer;
 }
 
-.mapBox h2 {
-
-    margin-top: 0;
-
-    letter-spacing: 4px;
-}
-
-.mapBox p {
-
-    color: #777;
-
-    font-size: 12px;
-}
-
-.card {
-
+.dimensionCard {
     padding: 15px;
 
     margin: 8px 0;
@@ -355,23 +357,20 @@ nav button:hover {
     cursor: pointer;
 }
 
-.card:hover {
-
+.dimensionCard:hover {
     border-color: #a960d5;
 
     background: #19121f;
 }
 
-.card b {
-
+.dimensionCard strong {
     color: #c277ed;
 }
 
-.card small {
-
+.dimensionCard small {
     display: block;
 
-    margin-top: 7px;
+    margin-top: 8px;
 
     color: #888;
 
@@ -381,7 +380,7 @@ nav button:hover {
 
 /* MOBILE */
 
-@media(max-width:650px) {
+@media (max-width: 650px) {
 
     #app {
         padding: 14px;
@@ -407,7 +406,8 @@ nav button:hover {
         font-size: 16px;
     }
 
-    nav button {
+    .buttons button {
         flex: 1;
     }
+
 }
