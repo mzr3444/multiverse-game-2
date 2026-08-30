@@ -6,10 +6,8 @@
 html,
 body{
     margin:0;
-    padding:0;
-    width:100%;
     min-height:100%;
-    background:#030306;
+    background:#030305;
     color:white;
     font-family:Arial,Helvetica,sans-serif;
 }
@@ -19,55 +17,41 @@ body{
 }
 
 
-/* =========================
-   SPACE BACKGROUND
-========================= */
+/* LOADING */
 
-#space{
+#loading{
     position:fixed;
     inset:0;
-    z-index:0;
-    pointer-events:none;
-}
-
-
-/* =========================
-   LOADING
-========================= */
-
-#loadingScreen{
-    position:fixed;
-    inset:0;
-    background:#030306;
     z-index:9999;
 
     display:flex;
     flex-direction:column;
-    align-items:center;
     justify-content:center;
+    align-items:center;
 
-    transition:opacity .6s;
+    background:#030305;
+
+    transition:opacity .5s;
 }
 
-#loadingScreen h1{
+#loading h1{
+    font-size:25px;
+    letter-spacing:6px;
     margin:20px 0 5px;
-
-    letter-spacing:8px;
-    font-size:28px;
 }
 
-#loadingScreen p{
-    color:#8c5cff;
-    font-size:11px;
+#loading p{
+    color:#9c5cff;
+    font-size:10px;
     letter-spacing:4px;
 }
 
-.loaderRing{
-    width:55px;
-    height:55px;
+.loader{
+    width:50px;
+    height:50px;
 
-    border:2px solid #21182b;
-    border-top-color:#bd67ff;
+    border:2px solid #251b31;
+    border-top-color:#b66cff;
 
     border-radius:50%;
 
@@ -81,11 +65,9 @@ body{
 }
 
 
-/* =========================
-   GAME
-========================= */
+/* APP */
 
-#game{
+#app{
     position:relative;
     z-index:2;
 
@@ -96,188 +78,235 @@ body{
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 header{
-    max-width:1200px;
+    max-width:1100px;
     margin:auto;
 
     display:flex;
     justify-content:space-between;
     align-items:flex-start;
-
-    position:relative;
-    z-index:5;
 }
 
 .logo{
-    font-size:23px;
+    font-size:22px;
     font-weight:bold;
     letter-spacing:4px;
 }
 
 .logo span{
-    color:#a762ff;
+    color:#ad62ff;
 }
 
-#storyName{
-    color:#777;
-    margin-top:8px;
-
-    font-size:10px;
+#storyTitle{
+    color:#666;
+    font-size:9px;
     letter-spacing:3px;
+    margin-top:8px;
 }
 
-.dimensionInfo{
+.dimensionBox{
     text-align:right;
 }
 
-.smallLabel{
-    color:#666;
+.dimensionBox small{
+    display:block;
+    color:#555;
     font-size:9px;
     letter-spacing:3px;
 }
 
-#dimensionNumber{
-    color:#c46dff;
-
-    font-size:28px;
-    font-weight:bold;
-
-    margin-top:4px;
+#dimensionID{
+    display:block;
+    color:#bd70ff;
+    font-size:27px;
+    margin-top:3px;
 }
 
 #dimensionName{
     color:#aaa;
-
     font-size:10px;
     letter-spacing:2px;
-
-    margin-top:3px;
 }
 
 
-/* =========================
-   CINEMATIC IMAGE
-========================= */
+/* SCENE */
 
-#cinematic{
-    max-width:1200px;
+#scene{
+    position:relative;
+
+    max-width:1100px;
     height:330px;
 
     margin:30px auto 20px;
 
-    position:relative;
     overflow:hidden;
 
-    border:1px solid #342b3c;
+    border:1px solid #332a3d;
     border-radius:5px;
 
-    background:#08070b;
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            #36204e 0,
+            #11101d 28%,
+            #06060b 65%
+        );
 
     box-shadow:
-        0 20px 70px rgba(0,0,0,.6);
+        0 20px 70px rgba(0,0,0,.7);
 }
 
-#background{
+
+/* PROCEDURAL VISUAL */
+
+#sceneVisual{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+.stars{
     position:absolute;
     inset:0;
 
-    background-position:center;
-    background-size:cover;
+    background-image:
+        radial-gradient(
+            white 1px,
+            transparent 1px
+        );
 
-    transform:scale(1.02);
+    background-size:55px 55px;
 
-    transition:
-        background-image .4s,
-        opacity .3s;
+    opacity:.35;
 }
 
-.imageOverlay{
+.moon{
     position:absolute;
-    inset:0;
+
+    width:150px;
+    height:150px;
+
+    right:15%;
+    top:15%;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #eee,
+            #777 45%,
+            #292635 75%
+        );
+
+    box-shadow:
+        0 0 70px rgba(180,120,255,.25);
+}
+
+.cityLights{
+    position:absolute;
+
+    bottom:0;
+    left:0;
+    right:0;
+
+    height:80px;
 
     background:
         linear-gradient(
             90deg,
-            rgba(0,0,0,.8),
-            rgba(0,0,0,.1),
-            rgba(0,0,0,.7)
-        ),
-        linear-gradient(
-            0deg,
-            rgba(0,0,0,.9),
-            transparent 60%
+            transparent 2%,
+            #16101e 2%,
+            #16101e 8%,
+            transparent 8%,
+            transparent 11%,
+            #21142c 11%,
+            #21142c 18%,
+            transparent 18%,
+            transparent 22%,
+            #15131f 22%,
+            #15131f 30%,
+            transparent 30%,
+            transparent 34%,
+            #25182e 34%,
+            #25182e 42%,
+            transparent 42%,
+            transparent 47%,
+            #17131e 47%,
+            #17131e 57%,
+            transparent 57%,
+            transparent 61%,
+            #24162d 61%,
+            #24162d 72%,
+            transparent 72%,
+            transparent 78%,
+            #17121e 78%,
+            #17121e 90%,
+            transparent 90%
         );
+
+    box-shadow:
+        0 -10px 35px rgba(130,70,180,.15);
 }
 
-.cinematicInfo{
+.sceneInfo{
     position:absolute;
+
     bottom:20px;
     left:25px;
 
-    z-index:2;
+    z-index:5;
 }
 
 #location{
     font-size:11px;
     letter-spacing:4px;
-    color:#ddd;
 }
 
-#chapter{
-    margin-top:7px;
-
-    color:#b66cff;
-    font-size:10px;
+#time{
+    color:#a863df;
+    font-size:9px;
     letter-spacing:3px;
+    margin-top:7px;
 }
 
 
-/* =========================
-   DIALOGUE
-========================= */
+/* DIALOGUE */
 
 main{
-    max-width:900px;
+    max-width:850px;
     margin:auto;
 }
 
-#dialogueBox{
-    background:rgba(8,7,12,.95);
+#dialogue{
+    background:rgba(9,8,13,.97);
 
-    border:1px solid #342b3d;
-
+    border:1px solid #342c3c;
     border-radius:5px;
 
-    padding:25px;
-
-    box-shadow:
-        0 15px 50px rgba(0,0,0,.5);
+    padding:24px;
 }
 
-.speakerLine{
+.speakerRow{
     display:flex;
     justify-content:space-between;
-    align-items:center;
 
-    margin-bottom:17px;
+    margin-bottom:15px;
 }
 
 #speaker{
-    color:#c875ff;
+    color:#c477ff;
 
-    font-size:13px;
+    font-size:12px;
     font-weight:bold;
 
     letter-spacing:3px;
 }
 
-#mood{
-    color:#bd68ff;
-    font-size:10px;
+#relationship{
+    color:#8d55b4;
 }
 
 #text{
@@ -286,13 +315,11 @@ main{
     color:#eee;
 
     font-size:18px;
-    line-height:1.65;
+    line-height:1.6;
 }
 
 
-/* =========================
-   CHOICES
-========================= */
+/* CHOICES */
 
 #choices{
     display:grid;
@@ -300,211 +327,188 @@ main{
     grid-template-columns:
         repeat(2,1fr);
 
-    gap:12px;
+    gap:10px;
 
-    margin-top:15px;
+    margin-top:14px;
 }
 
 .choice{
     min-height:70px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(21,17,27,.98),
-            rgba(11,10,15,.98)
-        );
-
-    border:1px solid #393142;
-
-    border-radius:5px;
-
-    color:#eee;
+    padding:15px;
 
     text-align:left;
 
-    padding:16px 18px;
+    color:#eee;
 
-    cursor:pointer;
-
-    transition:
-        transform .15s,
-        border-color .15s,
-        background .15s;
-}
-
-.choice:hover{
-    transform:translateY(-2px);
-
-    border-color:#b86cff;
-
-    background:#20152a;
-}
-
-.choiceNumber{
-    color:#8d5bb0;
-
-    font-size:10px;
-
-    margin-right:7px;
-}
-
-
-/* =========================
-   CONTROLS
-========================= */
-
-#controls{
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:9px;
-
-    margin-top:20px;
-}
-
-#controls button{
     background:#0d0b11;
 
-    color:#aaa;
-
-    border:1px solid #2d2833;
-
-    border-radius:4px;
-
-    padding:11px 15px;
+    border:1px solid #332d39;
+    border-radius:5px;
 
     cursor:pointer;
 
     transition:.15s;
 }
 
-#controls button:hover{
-    color:white;
-    border-color:#a862dc;
+.choice:hover{
+    transform:translateY(-2px);
+
+    border-color:#a861d8;
+
+    background:#1b1323;
+}
+
+.choiceNumber{
+    color:#995bc0;
+
+    margin-right:7px;
 }
 
 
-/* =========================
-   EVENT
-========================= */
+/* CONTROLS */
 
-#eventMessage{
+#controls{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-top:18px;
+}
+
+#controls button{
+    padding:10px 14px;
+
+    color:#aaa;
+
+    background:#0b0a0e;
+
+    border:1px solid #2c2731;
+    border-radius:4px;
+
+    cursor:pointer;
+}
+
+#controls button:hover{
+    color:white;
+    border-color:#9c5adb;
+}
+
+
+/* EVENT */
+
+#event{
     position:fixed;
 
-    left:50%;
     top:25px;
+    left:50%;
+
+    z-index:200;
 
     transform:
         translate(-50%,-30px);
 
     opacity:0;
 
-    z-index:200;
+    padding:13px 22px;
 
-    padding:13px 25px;
+    color:white;
 
-    background:#160b20;
+    background:#160c20;
 
-    border:1px solid #b866ee;
+    border:1px solid #a85ee0;
 
     border-radius:4px;
 
-    color:#eee;
-
-    font-size:12px;
-
-    letter-spacing:1px;
+    transition:.25s;
 
     pointer-events:none;
-
-    transition:.3s;
 }
 
-#eventMessage.show{
-    opacity:1;
-
+#event.show{
     transform:
         translate(-50%,0);
+
+    opacity:1;
 }
 
 
-/* =========================
-   MAP
-========================= */
+/* MAP */
 
 #map{
+    display:none;
+
     position:fixed;
     inset:0;
 
     z-index:500;
 
-    display:none;
-
-    align-items:center;
     justify-content:center;
+    align-items:center;
 
     padding:20px;
 
-    background:
-        rgba(0,0,0,.88);
+    background:rgba(0,0,0,.9);
 }
 
 #map.open{
     display:flex;
 }
 
-#mapWindow{
-    width:min(850px,100%);
+#mapPanel{
+    position:relative;
 
+    width:min(800px,100%);
     max-height:90vh;
 
     overflow:auto;
 
     padding:25px;
 
-    background:#09080e;
+    background:#09080d;
 
-    border:1px solid #5a3971;
-
+    border:1px solid #563a68;
     border-radius:6px;
 }
 
 #closeMap{
-    float:right;
+    position:absolute;
 
-    background:none;
+    right:15px;
+    top:10px;
 
     border:0;
+    background:none;
 
     color:#aaa;
 
-    font-size:25px;
+    font-size:27px;
 
     cursor:pointer;
 }
 
-#mapWindow h2{
+#mapPanel h2{
     margin:0;
 
     letter-spacing:4px;
 }
 
-.mapSubtitle{
+#mapPanel>p{
     color:#666;
 
     font-size:12px;
 }
 
 .dimensionCard{
-    padding:17px;
+    padding:16px;
 
     margin:9px 0;
 
     background:#111016;
 
-    border:1px solid #2e2935;
+    border:1px solid #2e2934;
 
     border-radius:4px;
 
@@ -514,36 +518,27 @@ main{
 }
 
 .dimensionCard:hover{
-    background:#1c1422;
-
-    border-color:#b86cff;
+    border-color:#aa63d9;
+    background:#1b1322;
 }
 
-.dimensionCard.active{
-    border-color:#a95cff;
-
-    box-shadow:
-        inset 3px 0 #a95cff;
+.dimensionCard.current{
+    border-color:#a85fe0;
 }
 
 .cardTop{
     display:flex;
-
     justify-content:space-between;
 }
 
-.cardTitle{
-    color:#cf83ff;
-
+.cardName{
+    color:#ce7aff;
     font-weight:bold;
 }
 
-.cardStatus{
-    color:#555;
-
-    font-size:10px;
-
-    letter-spacing:2px;
+.cardNumber{
+    color:#777;
+    font-size:11px;
 }
 
 .cardDescription{
@@ -552,18 +547,15 @@ main{
     margin-top:7px;
 
     font-size:12px;
-
     line-height:1.5;
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
-@media(max-width:700px){
+@media(max-width:650px){
 
-    #game{
+    #app{
         padding:14px;
     }
 
@@ -572,20 +564,16 @@ main{
     }
 
     .logo{
-        font-size:17px;
+        font-size:16px;
         letter-spacing:2px;
     }
 
-    #dimensionNumber{
-        font-size:21px;
+    #dimensionID{
+        font-size:20px;
     }
 
-    #dimensionName{
-        max-width:130px;
-    }
-
-    #cinematic{
-        height:250px;
+    #scene{
+        height:260px;
         margin-top:20px;
     }
 
@@ -600,6 +588,5 @@ main{
     #controls button{
         flex:1;
     }
-
 }
 ```
