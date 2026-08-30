@@ -2,150 +2,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Multiverse: Fractured</title>
-
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Multiverse</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="loadingScreen">
-    <div class="loaderRing"></div>
-    <h1>MULTIVERSE</h1>
-    <p>CONNECTING TO REALITIES...</p>
+<div id="loading">
+    <div class="loader"></div>
+    <h1>INFINITE MULTIVERSE</h1>
+    <p>BUILDING REALITY...</p>
 </div>
 
-<div id="space"></div>
+<div id="app">
 
-<div id="game">
+<header>
+    <div>
+        <div class="logo">INFINITE<span> MULTIVERSE</span></div>
+        <div id="storyTitle">GENERATED STORYLINE</div>
+    </div>
 
-    <header>
+    <div class="dimensionBox">
+        <small>DIMENSION</small>
+        <strong id="dimensionID">000001</strong>
+        <div id="dimensionName">Loading...</div>
+    </div>
+</header>
 
-        <div>
-            <div class="logo">
-                MULTIVERSE<span>: FRACTURED</span>
-            </div>
+<section id="scene">
 
-            <div id="storyName">
-                STORYLINE
-            </div>
-        </div>
+    <div id="sceneVisual">
+        <div class="stars"></div>
+        <div class="moon"></div>
+        <div class="cityLights"></div>
+    </div>
 
-        <div class="dimensionInfo">
-            <div class="smallLabel">CURRENT REALITY</div>
+    <div class="sceneInfo">
+        <div id="location"></div>
+        <div id="time"></div>
+    </div>
 
-            <div id="dimensionNumber">
-                01-A
-            </div>
+</section>
 
-            <div id="dimensionName">
-                THE ANDROID REBELLION
-            </div>
-        </div>
+<main>
 
-    </header>
+<div id="dialogue">
 
+    <div class="speakerRow">
+        <span id="speaker">SYSTEM</span>
+        <span id="relationship">●</span>
+    </div>
 
-    <section id="cinematic">
+    <div id="text">
+        Connecting to reality...
+    </div>
 
-        <div id="background"></div>
+</div>
 
-        <div class="imageOverlay"></div>
+<div id="choices"></div>
 
-        <div class="cinematicInfo">
+<div id="controls">
 
-            <div id="location">
-                UNKNOWN LOCATION
-            </div>
+    <button onclick="backtrack()">↩ Backtrack</button>
 
-            <div id="chapter">
-                CHAPTER 01
-            </div>
+    <button onclick="openMap()">◈ Dimension Map</button>
 
-        </div>
+    <button onclick="newStory()">✦ New Storyline</button>
 
-    </section>
+    <button onclick="hardReset()">⟳ Hard Reset</button>
 
+</div>
 
-    <main>
-
-        <div id="dialogueBox">
-
-            <div class="speakerLine">
-
-                <div id="speaker">
-                    SYSTEM
-                </div>
-
-                <div id="mood">
-                    ●
-                </div>
-
-            </div>
-
-            <div id="text">
-                Connecting...
-            </div>
-
-        </div>
-
-
-        <div id="choices"></div>
-
-
-        <div id="controls">
-
-            <button onclick="backtrack()">
-                ↩ BACKTRACK
-            </button>
-
-            <button onclick="openMap()">
-                ◈ DIMENSION MAP
-            </button>
-
-            <button onclick="newStory()">
-                ✦ NEW STORYLINE
-            </button>
-
-            <button onclick="hardReset()">
-                ⟳ HARD RESET
-            </button>
-
-        </div>
-
-    </main>
+</main>
 
 </div>
 
 
-<div id="eventMessage"></div>
+<div id="event"></div>
 
 
 <div id="map">
 
-    <div id="mapWindow">
+    <div id="mapPanel">
 
         <button id="closeMap" onclick="closeMap()">×</button>
 
         <h2>DIMENSION MAP</h2>
 
-        <p class="mapSubtitle">
-            Every reality contains a different story.
-        </p>
+        <p>Every reality you discover is recorded here.</p>
 
-        <div id="dimensionList"></div>
+        <div id="mapList"></div>
 
     </div>
 
 </div>
-
 
 <script src="game.js"></script>
 
