@@ -1,97 +1,94 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Infinite Multiverse</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="loading">
-    <div class="loader"></div>
-    <h1>INFINITE MULTIVERSE</h1>
-    <p>BUILDING REALITY...</p>
-</div>
-
 <div id="app">
 
 <header>
     <div>
-        <div class="logo">INFINITE<span> MULTIVERSE</span></div>
-        <div id="storyTitle">GENERATED STORYLINE</div>
+        <h1>INFINITE MULTIVERSE</h1>
+        <p>AN INTERACTIVE DIMENSIONAL STORY</p>
     </div>
 
-    <div class="dimensionBox">
-        <small>DIMENSION</small>
-        <strong id="dimensionID">000001</strong>
-        <div id="dimensionName">Loading...</div>
+    <div id="dimension">
+        DIMENSION #000000
     </div>
 </header>
 
-<section id="scene">
 
-    <div id="sceneVisual">
-        <div class="stars"></div>
-        <div class="moon"></div>
-        <div class="cityLights"></div>
-    </div>
+<section class="scene">
 
-    <div class="sceneInfo">
-        <div id="location"></div>
-        <div id="time"></div>
+    <div class="visual"></div>
+
+    <div id="location">
+        CONNECTING...
     </div>
 
 </section>
 
-<main>
 
-<div id="dialogue">
+<section class="story">
 
-    <div class="speakerRow">
-        <span id="speaker">SYSTEM</span>
-        <span id="relationship">●</span>
+    <div id="speaker">
+        SYSTEM
     </div>
 
     <div id="text">
-        Connecting to reality...
+        Loading reality...
     </div>
 
+    <div id="choices"></div>
+
+</section>
+
+
+<nav>
+
+    <button id="back">
+        ↩ Backtrack
+    </button>
+
+    <button id="map">
+        ◈ Dimension Map
+    </button>
+
+    <button id="new">
+        ✦ New Storyline
+    </button>
+
+    <button id="reset">
+        ⟳ Hard Reset
+    </button>
+
+</nav>
+
 </div>
 
-<div id="choices"></div>
 
-<div id="controls">
+<div id="mapScreen" class="hidden">
 
-    <button onclick="backtrack()">↩ Backtrack</button>
+    <div class="mapBox">
 
-    <button onclick="openMap()">◈ Dimension Map</button>
+        <button id="closeMap">
+            ×
+        </button>
 
-    <button onclick="newStory()">✦ New Storyline</button>
+        <h2>
+            DIMENSION MAP
+        </h2>
 
-    <button onclick="hardReset()">⟳ Hard Reset</button>
-
-</div>
-
-</main>
-
-</div>
-
-
-<div id="event"></div>
-
-
-<div id="map">
-
-    <div id="mapPanel">
-
-        <button id="closeMap" onclick="closeMap()">×</button>
-
-        <h2>DIMENSION MAP</h2>
-
-        <p>Every reality you discover is recorded here.</p>
+        <p>
+            Every dimension you visit appears here.
+        </p>
 
         <div id="mapList"></div>
 
@@ -99,8 +96,8 @@
 
 </div>
 
+
 <script src="game.js"></script>
 
 </body>
 </html>
-```
