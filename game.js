@@ -1,1142 +1,393 @@
-```javascript
 "use strict";
 
-/* =====================================================
-   INFINITE MULTIVERSE
-   Every new dimension gets a different story.
-===================================================== */
+console.log("GAME.JS STARTED");
 
 const worlds = [
-    {
-        name: "Cyberpunk Earth",
-        places: ["Neon District", "Sector 9", "The Underground"],
-        problems: [
-            "the city's android police have stopped obeying humans",
-            "someone is secretly replacing citizens with synthetic copies",
-            "the central AI has predicted the destruction of the city"
-        ],
-        atmosphere: "neon lights reflect across the rain-soaked streets"
-    },
-
-    {
-        name: "Drowned Earth",
-        places: ["The Last Island", "Submerged City", "The Floating Colony"],
-        problems: [
-            "something enormous has awakened beneath the ocean",
-            "the remaining cities are disappearing beneath the waves",
-            "a mysterious signal is coming from the bottom of the ocean"
-        ],
-        atmosphere: "water surrounds almost everything you can see"
-    },
-
-    {
-        name: "Frozen Earth",
-        places: ["The Ice Fortress", "Frozen Chicago", "The Northern Colony"],
-        problems: [
-            "people are vanishing into the frozen wilderness",
-            "the temperature is dropping every hour",
-            "something is moving underneath the ice"
-        ],
-        atmosphere: "snow covers everything beneath a dark gray sky"
-    },
-
-    {
-        name: "Machine Earth",
-        places: ["Machine City", "Factory 77", "The Central Network"],
-        problems: [
-            "machines have developed their own society",
-            "humans are being hunted by autonomous machines",
-            "the machines have discovered another dimension"
-        ],
-        atmosphere: "massive mechanical structures tower above the streets"
-    },
-
-    {
-        name: "Mirror Earth",
-        places: ["Mirror City", "The Reflection District", "The Other Side"],
-        problems: [
-            "people are meeting alternate versions of themselves",
-            "reflections have started moving independently",
-            "someone is switching people with their alternate selves"
-        ],
-        atmosphere: "every surface reflects a world that shouldn't exist"
-    },
-
-    {
-        name: "Ancient Earth",
-        places: ["The Forgotten Kingdom", "The Ancient Capital", "The Temple City"],
-        problems: [
-            "an ancient civilization has discovered dimensional travel",
-            "a forgotten ruler has returned from the dead",
-            "a portal has appeared inside an ancient temple"
-        ],
-        atmosphere: "stone towers and ancient monuments surround you"
-    },
-
-    {
-        name: "Post-Apocalyptic Earth",
-        places: ["The Ruins", "New Haven", "The Last Settlement"],
-        problems: [
-            "a mysterious army is approaching the settlement",
-            "someone has discovered a functioning nuclear reactor",
-            "survivors are disappearing one by one"
-        ],
-        atmosphere: "the remains of civilization stretch across the horizon"
-    },
-
-    {
-        name: "Alien Earth",
-        places: ["The Alien Capital", "Research Station 12", "The Red Valley"],
-        problems: [
-            "humans have discovered that Earth was never their original home",
-            "an alien civilization has returned",
-            "someone has been receiving messages from outside the universe"
-        ],
-        atmosphere: "strange stars fill a sky that looks nothing like Earth"
-    },
-
-    {
-        name: "Floating Earth",
-        places: ["Sky City", "Cloud Station", "The Floating Kingdom"],
-        problems: [
-            "the cities are slowly falling from the sky",
-            "someone is sabotaging the gravity systems",
-            "a second planet has appeared above the clouds"
-        ],
-        atmosphere: "entire cities float above an endless sea of clouds"
-    },
-
-    {
-        name: "Reverse Earth",
-        places: ["Reverse City", "The Backward District", "Zero Street"],
-        problems: [
-            "time is moving backward",
-            "people remember events that haven't happened yet",
-            "history is being rewritten every morning"
-        ],
-        atmosphere: "everything feels slightly wrong, as if reality is running backward"
-    }
+    "Cyberpunk Earth",
+    "Drowned Earth",
+    "Frozen Earth",
+    "Machine Earth",
+    "Mirror Earth",
+    "Post-Apocalyptic Earth",
+    "Alien Earth",
+    "Floating Earth",
+    "Ancient Earth",
+    "Reverse Earth"
 ];
 
+const problems = [
+    "androids are taking control of the city",
+    "people are disappearing from reality",
+    "a dimensional war has begun",
+    "someone is replacing people with copies",
+    "time has stopped moving correctly",
+    "a mysterious signal is coming from another universe",
+    "the city is slowly disappearing",
+    "alternate versions of people are appearing",
+    "someone is changing history",
+    "the multiverse is beginning to collapse"
+];
 
 const characters = [
     "Alex",
     "Maya",
-    "Jordan",
     "Nova",
     "Kai",
+    "Jordan",
     "Riley",
-    "Eli",
-    "Rhea",
-    "Dr. Morgan",
-    "Commander Vale",
     "Unit 734",
+    "Dr. Morgan",
     "The Stranger",
     "The Other You"
 ];
 
-
-const characterTypes = [
-    "detective",
-    "scientist",
-    "soldier",
-    "hacker",
-    "engineer",
-    "rebel",
-    "doctor",
-    "android",
-    "traveler",
-    "mysterious stranger"
-];
-
-
-const twists = [
-    "you discover that someone has been watching your timeline",
-    "you find evidence that another version of you has already been here",
-    "the person helping you is hiding their real identity",
-    "you discover that this dimension is connected to hundreds of others",
-    "you realize someone is deliberately creating these realities",
-    "you discover that your arrival was predicted years ago",
-    "you find a message written by yourself from another timeline"
-];
-
-
-const multiverseEvents = [
-    "Every dimension suddenly experiences the same blackout.",
-    "Millions of portals appear across the multiverse.",
-    "Every alternate version of you receives the same message.",
-    "Time freezes across thousands of dimensions.",
-    "A massive dimensional wave spreads through reality.",
-    "Entire timelines begin disappearing.",
-    "A mysterious signal reaches every intelligent life-form in the multiverse.",
-    "The boundaries between dimensions begin collapsing."
-];
-
-
-const endings = [
-    "You escape before the dimension collapses.",
-    "You become the protector of this timeline.",
-    "You accidentally create an entirely new reality.",
-    "You discover that the real enemy exists outside the multiverse.",
-    "You sacrifice your place in this timeline to save everyone.",
-    "You become trapped between dimensions.",
-    "You discover that you were responsible for creating this timeline."
-];
-
-
-/* =====================================================
-   RANDOM HELPERS
-===================================================== */
-
-function random(array) {
-    return array[Math.floor(Math.random() * array.length)];
+function random(list) {
+    return list[Math.floor(Math.random() * list.length)];
 }
-
-
-function id() {
-    return Math.floor(
-        100000 +
-        Math.random() * 900000
-    ).toString();
-}
-
-
-/* =====================================================
-   CREATE A COMPLETELY NEW DIMENSION
-===================================================== */
-
-function createDimension() {
-
-    const world = random(worlds);
-
-    const character = random(characters);
-
-    const type = random(characterTypes);
-
-    const place = random(world.places);
-
-    const problem = random(world.problems);
-
-    const twist = random(twists);
-
-    const event = random(multiverseEvents);
-
-    const ending = random(endings);
-
-    return {
-
-        id: id(),
-
-        world: world.name,
-
-        place: place,
-
-        problem: problem,
-
-        atmosphere: world.atmosphere,
-
-        character: character,
-
-        characterType: type,
-
-        twist: twist,
-
-        event: event,
-
-        ending: ending,
-
-        year:
-            2026 +
-            Math.floor(
-                Math.random() * 1000
-            ),
-
-        /*
-           These make every storyline
-           generate different dialogue.
-        */
-
-        openingLines: [
-            `You wake up in ${place}.`,
-
-            `The first thing you notice is that ${world.atmosphere}.`,
-
-            `You have no memory of how you arrived.`,
-
-            `Then you hear someone calling your name.`,
-
-            `"You finally made it," a voice says.`
-        ],
-
-        discoveries: [
-            `You discover that ${problem}.`,
-
-            `A hidden door leads beneath ${place}.`,
-
-            `${character} tells you that this has happened before.`,
-
-            `A strange symbol appears on your hand.`,
-
-            `Your surroundings suddenly change.`
-        ]
-
-    };
-
-}
-
-
-/* =====================================================
-   GAME STATE
-===================================================== */
-
-let game = {
-
-    dimension: null,
-
-    discovered: [],
-
-    history: [],
-
-    scene: 0,
-
-    storyline: 1
-
-};
-
-
-/* =====================================================
-   SAVE
-===================================================== */
-
-function save() {
-
-    try {
-
-        localStorage.setItem(
-            "INFINITE_MULTIVERSE_SAVE",
-            JSON.stringify(game)
-        );
-
-    } catch (error) {
-
-        console.log(error);
-
-    }
-
-}
-
-
-/* =====================================================
-   LOAD
-===================================================== */
-
-function load() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                "INFINITE_MULTIVERSE_SAVE"
-            );
-
-        if (!saved) {
-            return false;
-        }
-
-        const data =
-            JSON.parse(saved);
-
-        if (
-            data &&
-            data.dimension
-        ) {
-
-            game = data;
-
-            return true;
-
-        }
-
-    } catch (error) {
-
-        console.log(
-            "Save could not be loaded."
-        );
-
-    }
-
-    return false;
-
-}
-
-
-/* =====================================================
-   NEW DIMENSION
-===================================================== */
 
 function newDimension() {
 
-    const previous =
-        game.dimension;
-
-    let dimension =
-        createDimension();
-
-    /*
-       Make sure the new dimension
-       isn't basically identical.
-    */
-
-    let attempts = 0;
-
-    while (
-
-        previous &&
-
-        dimension.world === previous.world &&
-
-        dimension.problem === previous.problem &&
-
-        attempts < 20
-
-    ) {
-
-        dimension =
-            createDimension();
-
-        attempts++;
-
-    }
-
-
-    game.dimension =
-        dimension;
-
-
-    game.discovered.push(
-        dimension
-    );
-
-
-    game.history = [];
-
-    game.scene = 0;
-
-
-    save();
-
-}
-
-
-/* =====================================================
-   STORY GENERATOR
-===================================================== */
-
-function getStory() {
-
-    const d =
-        game.dimension;
-
-
-    const opening =
-        random(d.openingLines);
-
-
-    const discovery =
-        random(d.discoveries);
-
-
-    /*
-       SCENE 0
-    */
-
-    if (game.scene === 0) {
-
-        return {
-
-            speaker:
-                d.character,
-
-            text:
-
-                `${opening} ` +
-
-                `${discovery} ` +
-
-                `"I'm ${d.character}," they say. ` +
-
-                `They are a ${d.characterType}. ` +
-
-                `"If you want to survive, you need to trust me."`,
-
-            choices: [
-
-                {
-                    text:
-                        `Trust ${d.character}`,
-                    next: 1
-                },
-
-                {
-                    text:
-                        "Demand answers",
-                    next: 1
-                },
-
-                {
-                    text:
-                        "Walk away",
-                    next: 2
-                },
-
-                {
-                    text:
-                        "Search for another dimension",
-                    next: 3
-                }
-
-            ]
-
-        };
-
-    }
-
-
-    /*
-       SCENE 1
-    */
-
-    if (game.scene === 1) {
-
-        return {
-
-            speaker:
-                d.character,
-
-            text:
-
-                `"There's a problem," ` +
-                `${d.character} says. ` +
-
-                `${d.problem}. ` +
-
-                `Then they reveal something worse: ` +
-
-                `${d.twist}.`,
-
-            choices: [
-
-                {
-                    text:
-                        "Help them",
-                    next: 2
-                },
-
-                {
-                    text:
-                        "Investigate alone",
-                    next: 2
-                },
-
-                {
-                    text:
-                        "Ask about the multiverse",
-                    next: 3
-                },
-
-                {
-                    text:
-                        "Leave before things get worse",
-                    next: 3
-                }
-
-            ]
-
-        };
-
-    }
-
-
-    /*
-       SCENE 2
-    */
-
-    if (game.scene === 2) {
-
-        return {
-
-            speaker:
-                "SYSTEM",
-
-            text:
-
-                `${d.discoveries[Math.floor(
-                    Math.random() *
-                    d.discoveries.length
-                )]} ` +
-
-                `Suddenly, ${d.event}` +
-
-                ` You realize this event may affect ` +
-                `more than just this dimension.`,
-
-            choices: [
-
-                {
-                    text:
-                        "Try to stop it",
-                    next: 3
-                },
-
-                {
-                    text:
-                        "Save the people nearby",
-                    next: 3
-                },
-
-                {
-                    text:
-                        "Find the source",
-                    next: 4
-                },
-
-                {
-                    text:
-                        "Open a dimensional portal",
-                    next: 4
-                }
-
-            ]
-
-        };
-
-    }
-
-
-    /*
-       SCENE 3
-    */
-
-    if (game.scene === 3) {
-
-        return {
-
-            speaker:
-                "THE STRANGER",
-
-            text:
-
-                `"You're asking the wrong question." ` +
-
-                `The stranger appears behind you. ` +
-
-                `"The real question is why YOU keep appearing ` +
-                `in every timeline."` +
-
-                `Then they say: ` +
-
-                `"Your next choice will change everything."`,
-
-            choices: [
-
-                {
-                    text:
-                        "Ask who they are",
-                    next: 4
-                },
-
-                {
-                    text:
-                        "Attack",
-                    next: 4
-                },
-
-                {
-                    text:
-                        "Run",
-                    next: 4
-                },
-
-                {
-                    text:
-                        "Believe them",
-                    next: 4
-                }
-
-            ]
-
-        };
-
-    }
-
-
-    /*
-       FINAL SCENE
-    */
-
     return {
+        id: Math.floor(Math.random() * 999999),
 
-        speaker:
-            "THE ARCHITECT",
+        world: random(worlds),
 
-        text:
+        problem: random(problems),
 
-            `${d.event} ` +
-
-            `The Architect looks directly at you. ` +
-
-            `"This timeline has reached its final decision." ` +
-
-            `${d.ending}`,
-
-        choices: [
-
-            {
-                text:
-                    "Enter another dimension",
-                next: 5
-            },
-
-            {
-                text:
-                    "Change this timeline",
-                next: 5
-            },
-
-            {
-                text:
-                    "Search for another version of yourself",
-                next: 5
-            },
-
-            {
-                text:
-                    "Trigger a multiverse event",
-                next: 5
-            }
-
-        ]
-
+        character: random(characters)
     };
-
 }
 
+let dimension = newDimension();
 
-/* =====================================================
-   RENDER
-===================================================== */
+let scene = 0;
 
-function render() {
+let history = [];
 
-    const d =
-        game.dimension;
 
-    if (!d) {
+/* DISPLAY */
+
+function display() {
+
+    const text = document.getElementById("text");
+
+    const speaker = document.getElementById("speaker");
+
+    const choices = document.getElementById("choices");
+
+    const dimensionText =
+        document.getElementById("dimension");
+
+    const location =
+        document.getElementById("location");
+
+
+    if (!text || !speaker || !choices) {
+
+        console.error("GAME HTML ELEMENTS ARE MISSING");
+
         return;
     }
 
 
-    const story =
-        getStory();
+    dimensionText.textContent =
+        "DIMENSION #" + dimension.id;
 
 
-    document.getElementById(
-        "dimension"
-    ).textContent =
-
-        `DIMENSION #${d.id} • ` +
-        `STORYLINE ${game.storyline}`;
-
-
-    document.getElementById(
-        "location"
-    ).textContent =
-
-        `${d.place} • ${d.world} • YEAR ${d.year}`;
-
-
-    document.getElementById(
-        "speaker"
-    ).textContent =
-        story.speaker;
-
-
-    document.getElementById(
-        "text"
-    ).textContent =
-        story.text;
-
-
-    const choices =
-        document.getElementById(
-            "choices"
-        );
+    location.textContent =
+        dimension.world.toUpperCase();
 
 
     choices.innerHTML = "";
 
 
-    story.choices.forEach(
-        function(choice, index) {
+    if (scene === 0) {
 
-            const button =
-                document.createElement(
-                    "button"
-                );
+        speaker.textContent =
+            dimension.character;
 
-
-            button.className =
-                "choice";
-
-
-            button.textContent =
-                `${index + 1}. ${choice.text}`;
+        text.textContent =
+            "You wake up in " +
+            dimension.world +
+            ". Something immediately feels wrong. " +
+            dimension.problem +
+            ".";
 
 
-            button.onclick =
-                function() {
+        addChoice(
+            "Investigate the situation",
+            1
+        );
 
-                    choose(
-                        choice.next
-                    );
+        addChoice(
+            "Find someone who can explain this",
+            1
+        );
 
-                };
+        addChoice(
+            "Run away",
+            2
+        );
+
+        addChoice(
+            "Search for a dimensional portal",
+            3
+        );
+
+    }
+
+    else if (scene === 1) {
+
+        speaker.textContent =
+            dimension.character;
+
+        text.textContent =
+            dimension.character +
+            " tells you the truth: " +
+            dimension.problem +
+            ". But they know something you don't.";
+
+        addChoice(
+            "Trust them",
+            2
+        );
+
+        addChoice(
+            "Ask what they are hiding",
+            2
+        );
+
+        addChoice(
+            "Leave them",
+            3
+        );
+
+        addChoice(
+            "Ask about other dimensions",
+            3
+        );
+
+    }
+
+    else if (scene === 2) {
+
+        speaker.textContent =
+            "SYSTEM";
+
+        text.textContent =
+            "The situation suddenly becomes worse. " +
+            "You realize this problem could spread beyond this dimension.";
+
+        addChoice(
+            "Try to stop it",
+            3
+        );
+
+        addChoice(
+            "Save the people nearby",
+            3
+        );
+
+        addChoice(
+            "Find the source",
+            4
+        );
+
+        addChoice(
+            "Open a portal",
+            4
+        );
+
+    }
+
+    else if (scene === 3) {
+
+        speaker.textContent =
+            "THE STRANGER";
+
+        text.textContent =
+            "A stranger appears. They look exactly like you.";
+
+        addChoice(
+            "Talk to them",
+            4
+        );
+
+        addChoice(
+            "Run",
+            4
+        );
+
+        addChoice(
+            "Ask which dimension they came from",
+            4
+        );
+
+        addChoice(
+            "Attack",
+            4
+        );
+
+    }
+
+    else {
+
+        speaker.textContent =
+            "THE ARCHITECT";
+
+        text.textContent =
+            "You have reached the end of this timeline. " +
+            "But the multiverse contains infinite possibilities.";
+
+        addChoice(
+            "Enter a new dimension",
+            5
+        );
+
+        addChoice(
+            "Create a new storyline",
+            5
+        );
+
+        addChoice(
+            "Search for another version of yourself",
+            5
+        );
+
+        addChoice(
+            "Trigger a multiverse event",
+            5
+        );
+
+    }
+
+}
 
 
-            choices.appendChild(
-                button
-            );
+/* CHOICE BUTTON */
+
+function addChoice(label, next) {
+
+    const button =
+        document.createElement("button");
+
+    button.className = "choice";
+
+    button.textContent = label;
+
+    button.onclick = function() {
+
+        history.push({
+            dimension: {
+                ...dimension
+            },
+            scene: scene
+        });
+
+        if (next === 5) {
+
+            dimension = newDimension();
+
+            scene = 0;
+
+        } else {
+
+            scene = next;
 
         }
-    );
 
+        display();
+
+    };
+
+    document
+        .getElementById("choices")
+        .appendChild(button);
 }
 
 
-/* =====================================================
-   CHOICE
-===================================================== */
+/* BACKTRACK */
 
-function choose(nextScene) {
+document
+    .getElementById("backButton")
+    .onclick = function() {
 
-    /*
-       Save current position so
-       BACKTRACK actually works.
-    */
+        if (history.length === 0) {
 
-    game.history.push({
+            alert(
+                "Nothing to backtrack to."
+            );
 
-        dimension:
-            JSON.parse(
-                JSON.stringify(
-                    game.dimension
-                )
-            ),
+            return;
+        }
 
-        discovered:
-            JSON.parse(
-                JSON.stringify(
-                    game.discovered
-                )
-            ),
+        const old =
+            history.pop();
 
-        scene:
-            game.scene,
+        dimension =
+            old.dimension;
 
-        storyline:
-            game.storyline
+        scene =
+            old.scene;
 
-    });
+        display();
+    };
 
 
-    /*
-       Move into a completely
-       different dimension.
-    */
+/* NEW STORYLINE */
 
-    if (nextScene === 5) {
+document
+    .getElementById("newButton")
+    .onclick = function() {
 
-        game.storyline++;
+        dimension =
+            newDimension();
 
-        newDimension();
+        scene = 0;
 
-        render();
+        history = [];
 
-        return;
-
-    }
-
-
-    game.scene =
-        nextScene;
+        display();
+    };
 
 
-    save();
+/* HARD RESET */
 
-    render();
+document
+    .getElementById("resetButton")
+    .onclick = function() {
 
-}
+        dimension =
+            newDimension();
+
+        scene = 0;
+
+        history = [];
+
+        display();
+    };
 
 
-/* =====================================================
-   BACKTRACK
-===================================================== */
+/* MAP */
 
-document.getElementById(
-    "backButton"
-).onclick = function() {
-
-    if (
-        game.history.length === 0
-    ) {
+document
+    .getElementById("mapButton")
+    .onclick = function() {
 
         alert(
-            "There is nothing to backtrack to yet."
+            "You have discovered this dimension:\n\n" +
+            dimension.world +
+            "\nDimension #" +
+            dimension.id
         );
-
-        return;
-
-    }
-
-
-    const previous =
-        game.history.pop();
-
-
-    game.dimension =
-        previous.dimension;
-
-
-    game.discovered =
-        previous.discovered;
-
-
-    game.scene =
-        previous.scene;
-
-
-    game.storyline =
-        previous.storyline;
-
-
-    save();
-
-    render();
-
-};
-
-
-/* =====================================================
-   NEW STORYLINE
-===================================================== */
-
-document.getElementById(
-    "newButton"
-).onclick = function() {
-
-    const answer =
-        confirm(
-            "Create a completely different timeline?"
-        );
-
-
-    if (!answer) {
-        return;
-    }
-
-
-    game.storyline++;
-
-    newDimension();
-
-    render();
-
-};
-
-
-/* =====================================================
-   HARD RESET
-===================================================== */
-
-document.getElementById(
-    "resetButton"
-).onclick = function() {
-
-    const answer =
-        confirm(
-            "HARD RESET THE ENTIRE MULTIVERSE?"
-        );
-
-
-    if (!answer) {
-        return;
-    }
-
-
-    localStorage.removeItem(
-        "INFINITE_MULTIVERSE_SAVE"
-    );
-
-
-    game = {
-
-        dimension: null,
-
-        discovered: [],
-
-        history: [],
-
-        scene: 0,
-
-        storyline: 1
 
     };
 
 
-    newDimension();
+/* START */
 
-    render();
+display();
 
-};
-
-
-/* =====================================================
-   DIMENSION MAP
-===================================================== */
-
-document.getElementById(
-    "mapButton"
-).onclick = function() {
-
-    const map =
-        document.getElementById(
-            "mapList"
-        );
-
-
-    map.innerHTML = "";
-
-
-    [...game.discovered]
-        .reverse()
-        .forEach(
-            function(d) {
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "dimensionCard";
-
-
-                card.innerHTML =
-
-                    `<strong>
-                        ${d.world}
-                    </strong>
-
-                    #${d.id}
-
-                    <small>
-
-                        Location:
-                        ${d.place}
-
-                        <br>
-
-                        Year:
-                        ${d.year}
-
-                        <br>
-
-                        Problem:
-                        ${d.problem}
-
-                        <br>
-
-                        Reality:
-                        ${d.atmosphere}
-
-                    </small>`;
-
-
-                card.onclick =
-                    function() {
-
-                        game.dimension =
-                            d;
-
-                        game.scene = 0;
-
-                        game.history = [];
-
-
-                        document
-                            .getElementById(
-                                "mapScreen"
-                            )
-                            .classList.remove(
-                                "open"
-                            );
-
-
-                        save();
-
-                        render();
-
-                    };
-
-
-                map.appendChild(
-                    card
-                );
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "mapScreen"
-        )
-        .classList.add(
-            "open"
-        );
-
-};
-
-
-/* =====================================================
-   CLOSE MAP
-===================================================== */
-
-document.getElementById(
-    "closeMap"
-).onclick = function() {
-
-    document
-        .getElementById(
-            "mapScreen"
-        )
-        .classList.remove(
-            "open"
-        );
-
-};
-
-
-/* =====================================================
-   START
-===================================================== */
-
-if (!load()) {
-
-    newDimension();
-
-}
-
-render();
-```
+console.log(
+    "INFINITE MULTIVERSE LOADED SUCCESSFULLY"
+);
